@@ -11,6 +11,15 @@
 {#        {% endblock %}#}
     </head>
     <body>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <p>Email: {{ app.user.email }}</p>
+            <form action="{{ path('user_logout') }}" method="post">
+                <input type="submit" value=logout>
+            </form>
+        {% else %}
+            <button><a href="{{ path('user_login') }}">Login</a></button>
+        {% endif %}
+
         <h1>hello</h1>
         {% block body %}
         {% endblock %}

@@ -18,7 +18,7 @@ npm run  build
     </tr>
     <tr>
         <td>symfomy</td>
-        <td>6.2.14</td>
+        <td>6.4</td>
     </tr>
     <tr>
         <td>node</td>

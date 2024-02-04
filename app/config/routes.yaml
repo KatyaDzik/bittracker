@@ -14,6 +14,11 @@ user_login:
     controller:  App\Controller\User\AuthController::login
     methods: POST|GET
 
+user_logout:
+    path: /user/logout
+    controller: App\Controller\User\AuthController::login
+    methods: POST
+
 home:
     path: /
     controller: App\Controller\AppController
