@@ -1,0 +1,18 @@
+<div class="header">
+    <nav class="menu">
+        <ul>
+            <li><a class="roboto-font"><span class="pixel-font">Torrent</span>Hub</a></li>
+{#            <li><a href="#">О нас</a></li>#}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <form action="{{ path('user_logout') }}" method="post">
+                    <input class="pixel-font" type="submit" value=logout>
+                </form>
+            {% else %}
+                <div style="display: flex; width: 15%; justify-content: space-between;">
+                    <li><a class="pixel-font" href="{{ path('user_login') }}">Sign in</a></li>
+                    <li><a class="pixel-font" href="{{ path('user_registration') }}">Sign up</a></li>
+                </div>
+            {% endif %}
+        </ul>
+    </nav>
+</div>

@@ -1,0 +1,48 @@
+@font-face {
+    font-family: PixelifySans-Regular;
+    src: url("../font/pixelify/PixelifySans-Regular.ttf");
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url("../font/roboto/Roboto-Regular.ttf");
+}
+
+body {
+    background-image: url("../img/stars.jpg");
+    background-size: cover;
+}
+
+.pixel-font {
+    font-family: 'PixelifySans-Regular';
+}
+
+.roboto-font {
+    font-family: 'Roboto';
+}
+
+/* Header*/
+nav.menu {
+    width: 80%;
+    margin: 0 auto;
+}
+
+nav.menu ul {
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid white;
+    list-style-type: none;
+}
+
+nav.menu ul a,input {
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+    background: none;
+    border: none;
+}
+
+nav.menu ul a:hover, input:hover{
+    text-shadow: 0px 0px 15px white;
+}
