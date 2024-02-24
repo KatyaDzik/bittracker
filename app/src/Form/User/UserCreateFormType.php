@@ -3,6 +3,7 @@
 namespace App\Form\User;
 
 use App\Entity\User;
+use App\Validator\PasswordMatch;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -23,7 +24,7 @@ class UserCreateFormType extends AbstractType
             ])
             ->add('name', TextType::class, [
                 'required' => true,
-            ] )
+            ])
             ->add('avatarFile', FileType::class, [
                 'label' => 'Avatar',
                 'mapped' => false,
@@ -43,6 +44,9 @@ class UserCreateFormType extends AbstractType
             ->add('password', PasswordType::class, )
             ->add('confirm_password', PasswordType::class, options: [
                 'mapped' => false,
+                'constraints' => [
+                    new PasswordMatch(),
+                ]
             ])
             ->add('save', SubmitType::class)
         ;

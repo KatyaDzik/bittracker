@@ -4,7 +4,6 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\User\UserCreateFormType;
-use App\Form\User\UserLoginType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -13,6 +12,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AuthController extends AbstractController
 {
@@ -23,6 +23,7 @@ class AuthController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @param Security $security
+     * @param SluggerInterface $slugger
      * @return Response
      */
     public function registration(
@@ -30,13 +31,14 @@ class AuthController extends AbstractController
         EntityManagerInterface $entityManager,
         Request $request,
         Security $security,
+        SluggerInterface $slugger,
     ): Response
     {
         $user = new User();
         $form = $this->createForm(UserCreateFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() ) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -44,6 +46,21 @@ class AuthController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
+
+            $avatarFile = $form->get('avatarFile')->getData();
+
+            if($avatarFile) {
+                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$avatarFile->guessExtension();
+
+                $avatarFile->move(
+                    $this->getParameter('avatars_directory'),
+                    $newFilename
+                );
+
+                $user->setAvatar($newFilename);
+            }
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -80,7 +97,7 @@ class AuthController extends AbstractController
      * @param Security $security
      * @return RedirectResponse
      */
-    public function logout(Security $security,): RedirectResponse
+    public function logout(Security $security): RedirectResponse
     {
         $security->logout();
 
