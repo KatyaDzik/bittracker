@@ -2,7 +2,6 @@
     <nav class="menu">
         <ul>
             <li><a class="roboto-font"><span class="pixel-font">Torrent</span>Hub</a></li>
-{#            <li><a href="#">О нас</a></li>#}
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <form action="{{ path('user_logout') }}" method="post">
                     <input class="pixel-font" type="submit" value=logout>
