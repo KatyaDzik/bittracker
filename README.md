@@ -29,3 +29,8 @@ npm run  build
         <td>v8.19.4</td>
     </tr>
 </table>
+
+### Create AdminUser (password: password)
+#### run sql 
+INSERT into admin_user (id, email, password, name, created_at)
+VALUES (nextval('admin_user_id_seq'), 'admin@gmail.com', '$2y$13$IztDZamd9U.XcVWqVfXlM.rqqN82c.DZ/GtUfQ1SVNC.fJ8Xv0kRW', 'admin', current_timestamp);

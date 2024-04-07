@@ -5,19 +5,19 @@ controllers:
     type: attribute
 
 user_registration:
-    path: /user/registration
+    path: /registration
     controller:  App\Controller\User\AuthController::registration
     methods: POST|GET
 
 user_login:
-    path: /user/login
+    path: /login
     controller:  App\Controller\User\AuthController::login
     methods: POST|GET
 
 user_logout:
-    path: /user/logout
+    path: /logout
     controller: App\Controller\User\AuthController::login
-    methods: POST
+    methods: POST|GET
 
 home:
     path: /

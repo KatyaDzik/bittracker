@@ -1,0 +1,47 @@
+.login-block {
+    width: 30%;
+    height: 250px;
+    background: white;
+    border-radius: 20px;
+    padding: 15px 70px;
+    margin: 0 auto;
+    margin-top: 200px;
+    font-size: 20pt;
+
+}
+
+.login-block form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-block button[type='submit'] {
+    background-color: green;
+    color: white;
+    width: 40%;
+    margin: 0 auto;
+    border-radius: 50px;
+    border: none;
+    box-sizing: border-box;
+    height: 30px;
+    margin-top: 20px;
+}
+
+.login-block button[type='submit']:hover {
+    background-color: darkgreen;
+}
+.login-block .form-item {
+    display: flex;
+    padding: 5px 0;
+}
+
+.login-block .form-item label {
+    width: 20%;
+}
+
+.login-block input[type='text'], input[type='password'] {
+    border-radius: 5px;
+    font-size: 15pt;
+    width: 80%;
+}
+
