@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
@@ -39,8 +41,16 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(length: 255)]
     private ?string $state = self::ACTIVE_STATE;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: TorrentFile::class)]
+    private ?Collection $torrents;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
+
+    public function __construct()
+    {
+        $this->torrents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -141,5 +151,17 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function eraseCredentials(): void
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getTorrents(): ?Collection
+    {
+        return $this->torrents;
+    }
+
+    public function setTorrents(?Collection $torrents): static
+    {
+        $this->torrents = $torrents;
+
+        return $this;
     }
 }

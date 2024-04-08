@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if success_msg is defined %}
+        <h2>{{ success_msg }}</h2>
+    {% endif %}
+
+    <div style="background: #0a53be " class="example-wrapper">
+        {{ form_errors(form) }}
+        {{ form(form) }}
+    </div>
+{% endblock %}
