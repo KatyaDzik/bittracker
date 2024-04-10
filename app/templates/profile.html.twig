@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if success_msg is defined %}
+        <h2>{{ success_msg }}</h2>
+    {% endif %}
+
+    <div style="background: #0a53be " class="example-wrapper">
+        <table>
+            <tr>
+                <th>{{ 'Torrent'|trans }}</th>
+                <th></th>
+            </tr>
+            {% for torrent in torrents %}
+                <tr>
+                    <td>{{ torrent.title }}</td>
+                    <td><button data-id="{{ torrent.id }}" id="delete_torrent_btn">{{ 'Delete'|trans }}</button></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            $('#delete_torrent_btn').on('click', function () {
+                let id = $(this).data('id');
+                let url = `/torrent/file/${id}`;
+                let isConfirmed = confirm("{{ 'Delete a file?'|trans }}")
+                if (isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: "DELETE",
+                        success: function () {
+                            location.reload();
+                        },
+                        error: function (response) {
+                            console.log(response)
+                        },
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}
