@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -45,7 +47,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?Collection $torrents;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
+    private ?DateTimeInterface $created_at = null;
 
     public function __construct()
     {
@@ -130,7 +132,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->created_at;
     }
@@ -138,7 +140,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\PrePersist]
     public function setCreatedAt(): static
     {
-        $this->created_at = new \DateTimeImmutable();;
+        $this->created_at = new DateTimeImmutable();
 
         return $this;
     }

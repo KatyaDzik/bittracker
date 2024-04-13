@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AdminUserRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,7 +38,7 @@ class AdminUser implements PasswordAuthenticatedUserInterface, UserInterface
     private ?string $avatar = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
+    private ?DateTimeInterface $created_at = null;
 
     public function getId(): ?int
     {
@@ -104,7 +106,7 @@ class AdminUser implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->created_at;
     }
@@ -112,7 +114,7 @@ class AdminUser implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\PrePersist]
     public function setCreatedAt(): static
     {
-        $this->created_at = new \DateTimeImmutable();;
+        $this->created_at = new DateTimeImmutable();
 
         return $this;
     }

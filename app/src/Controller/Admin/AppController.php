@@ -13,6 +13,7 @@ class AppController extends AbstractController
     /**
      * The method returns a template for the main page.
      *
+     * @param Security $security
      * @return Response
      */
     #[Route(name: 'home')]

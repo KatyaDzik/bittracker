@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TorrentFileRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,10 +38,10 @@ class TorrentFile
     private ?Category $category = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
+    private ?DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $updated_at = null;
+    private ?DateTimeInterface $updated_at = null;
 
     public function getId(): ?int
     {
@@ -118,12 +120,12 @@ class TorrentFile
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->created_at;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updated_at;
     }
@@ -131,8 +133,8 @@ class TorrentFile
     #[ORM\PrePersist]
     public function setCreatedAt(): static
     {
-        $this->created_at = new \DateTimeImmutable();
-        $this->updated_at = new \DateTimeImmutable();
+        $this->created_at = new DateTimeImmutable();
+        $this->updated_at = new DateTimeImmutable();
 
         return $this;
     }
@@ -140,7 +142,7 @@ class TorrentFile
     #[ORM\PreUpdate]
     public function setUpdatedAt(): static
     {
-        $this->updated_at = new \DateTimeImmutable();
+        $this->updated_at = new DateTimeImmutable();
 
         return $this;
     }

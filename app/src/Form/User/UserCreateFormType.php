@@ -41,7 +41,7 @@ class UserCreateFormType extends AbstractType
                     ])
                 ],
             ])
-            ->add('password', PasswordType::class, )
+            ->add('password', PasswordType::class)
             ->add('confirm_password', PasswordType::class, options: [
                 'mapped' => false,
                 'constraints' => [

@@ -8,7 +8,7 @@ class PasswordMatchValidator extends ConstraintValidator
 {
     public function validate(mixed $value, Constraint $constraint): void
     {
-        /* @var $constraint \App\Validator\PasswordMatch */
+        /* @var $constraint PasswordMatch */
         if ($value !== $this->context->getRoot()->get('password')->getData()) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
