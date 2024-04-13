@@ -1,4 +1,6 @@
 security:
+#    access_decision_manager:
+#        strategy: unanimous
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     providers:
@@ -16,7 +18,7 @@ security:
             security: false
         admin:
             lazy: true
-            pattern: ^/(admin)(?!/login)
+            pattern: ^/(admin)
             provider: admin_user_provider
             form_login:
                 login_path: admin_app_login
@@ -25,8 +27,6 @@ security:
                 password_parameter: _password
                 # where to redirect after success login
                 default_target_path: admin_home
-#            custom_authenticators:
-#                - App\Security\AdminAuthenticator
             logout:
                 path: admin_app_logout
                 # where to redirect after logout
@@ -41,10 +41,11 @@ security:
             logout:
                 path: user_logout
                 target: user_login
-    access_control:
-        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
-        - { path: ^/admin, roles: IS_AUTHENTICATED_FULLY }
-        # - { path: ^/profile, roles: ROLE_USER }
+#    access_control:
+#        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        #        - { path: ^/admin, roles: IS_AUTHENTICATED_FULLY }
+#        # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
     security:

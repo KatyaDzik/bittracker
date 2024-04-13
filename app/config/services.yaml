@@ -24,3 +24,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    security.user_access_voter:
+        class:  App\Security\UserAccessVoter
+        tags: ['security.voter']
+
+    security.admin_access_voter:
+        class: App\Security\AdminAccessVoter
+        tags: [ 'security.voter' ]
