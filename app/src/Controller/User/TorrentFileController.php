@@ -37,7 +37,7 @@ class TorrentFileController extends AbstractController
             $torrent = $form->getData();
             $torrentFileService->createTorrentFile($torrent, $form->get('torrentFile')->getData());
 
-            return $this->redirectToRoute('profile');
+            return $this->redirectToRoute('profile_view');
         }
 
         return $this->render('create_torrent.html.twig', [

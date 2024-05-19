@@ -53,7 +53,6 @@ class TorrentFileService
 
         $torrentFile->setFile($newFilename);
         $this->entityManager->persist($torrentFile);
-
         try {
             $this->entityManager->flush();
             $this->eventDispatcher->dispatch(new LoadTorrentFileEvent($torrentFile));
