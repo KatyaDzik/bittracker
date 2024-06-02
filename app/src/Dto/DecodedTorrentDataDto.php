@@ -31,13 +31,14 @@ class DecodedTorrentDataDto
         private readonly ?string            $comment,
         private readonly ?string            $createdBy,
         private readonly ?DateTimeInterface $creationDate,
-        private readonly string             $encoding,
+        private readonly ?string             $encoding,
         private readonly string             $length,
         private readonly string             $name,
         private readonly string             $pieceLength,
         private readonly string             $pieces,
         private readonly ?string            $publisher,
         private readonly ?string            $publisherUrl,
+        private readonly ?string            $infoHash,
     ) {
     }
 
@@ -66,7 +67,7 @@ class DecodedTorrentDataDto
         return $this->creationDate;
     }
 
-    public function getEncoding(): string
+    public function getEncoding(): ?string
     {
         return $this->encoding;
     }
@@ -99,5 +100,10 @@ class DecodedTorrentDataDto
     public function getPublisherUrl(): ?string
     {
         return $this->publisherUrl;
+    }
+
+    public function getInfoHash(): ?string
+    {
+        return $this->infoHash;
     }
 }

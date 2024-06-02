@@ -4,6 +4,7 @@ namespace App\Controller\Torrent;
 
 use App\Entity\TorrentFile;
 use App\Service\BecodeService;
+use App\Service\UDPTrackerProtocolService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,6 +27,9 @@ class TorrentController extends AbstractController
         $file = new File($fullPath);
         $becodeService = new BecodeService($file);
 
-        dd($becodeService->getDecodedTorrentData());
+        $decodedData = $becodeService->getDecodedTorrentData();
+
+        // todo только если у Announce протокол udp проверка
+        $service = new UDPTrackerProtocolService($decodedData);
     }
 }

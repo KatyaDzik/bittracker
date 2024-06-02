@@ -1,0 +1,7 @@
+src/.env
+node_modules
+vendor
+var
+public/bundles
+public/build
+public/uploads

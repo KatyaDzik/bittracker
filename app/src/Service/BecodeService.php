@@ -16,7 +16,6 @@ class BecodeService
     public function __construct(File $file)
     {
         $this->fileContent = $file->getContent();
-
         $decodedData = $this->bdecode();
 
         $this->decodedTorrentData = new DecodedTorrentDataDto(
@@ -25,13 +24,14 @@ class BecodeService
             comment: $decodedData['comment'] ?? null,
             createdBy: $decodedData['created by'] ?? null,
             creationDate: $decodedData['creation date'] ? (new DateTime())->setTimestamp($decodedData['creation date']) : null,
-            encoding: $decodedData['encoding'],
+            encoding: $decodedData['encoding'] ?? null,
             length:  $decodedData['info']['length'],
             name: $decodedData['info']['name'],
             pieceLength: $decodedData['info']['piece length'],
             pieces: $decodedData['info']['pieces'],
-            publisher: $decodedData['publisher'],
-            publisherUrl: $decodedData['publisher-url'],
+            publisher: $decodedData['publisher'] ?? null,
+            publisherUrl: $decodedData['publisher-url'] ?? null,
+            infoHash: $this->getInfoHash($decodedData),
         );
     }
 
@@ -159,5 +159,12 @@ class BecodeService
     public function getDecodedTorrentData(): decodedTorrentDataDto
     {
         return $this->decodedTorrentData;
+    }
+
+    function getInfoHash(array $decodedData, $raw = false): string
+    {
+        $Encoder = new Encode();
+
+        return sha1($Encoder->encode($decodedData['info']), $raw);
     }
 }
