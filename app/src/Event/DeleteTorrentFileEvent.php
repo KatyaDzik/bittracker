@@ -11,8 +11,7 @@ class DeleteTorrentFileEvent extends Event
 
     public function __construct(
         TorrentFile $torrentFile,
-    )
-    {
+    ) {
         $this->torrentFile = $torrentFile;
     }
 

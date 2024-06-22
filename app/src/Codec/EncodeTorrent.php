@@ -1,35 +1,39 @@
 <?php
 
-namespace App\Service;
+namespace App\Codec;
 
-class Encode
+use App\Exception\TorrentException;
+
+class EncodeTorrent implements EncodeTorrentInterface
 {
-    public function encode($mixed)
+    /**
+     * @throws TorrentException
+     */
+    public function encode($mixed): string
     {
-        switch (gettype($mixed)) {
-            case is_null($mixed):
-                return $this->encodeString('');
-            case 'string':
-                return $this->encodeString($mixed);
-            case 'integer':
-            case 'double':
-                return $this->encodeInt(sprintf('%.0f', round($mixed)));
-            case 'array':
-                return $this->encodeArray($mixed);
-        }
+        return match (gettype($mixed)) {
+            is_null($mixed) => $this->encodeString(''),
+            'string' => $this->encodeString($mixed),
+            'integer', 'double' => $this->encodeInt(sprintf('%.0f', round($mixed))),
+            'array' => $this->encodeArray($mixed),
+            default => throw new TorrentException('Unsupported type: ' . gettype($mixed)),
+        };
     }
 
-    function encodeString($str)
+    protected function encodeString($str): string
     {
         return strlen($str) . ':' . $str;
     }
 
-    function encodeInt($int)
+    protected function encodeInt($int): string
     {
         return 'i' . $int . 'e';
     }
 
-    function encodeArray(array $array)
+    /**
+     * @throws TorrentException
+     */
+    protected function encodeArray(array $array): string
     {
         // Check for strings in the keys
         $isList = true;

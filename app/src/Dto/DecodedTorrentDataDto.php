@@ -26,19 +26,19 @@ class DecodedTorrentDataDto
      * @param string|null $publisherUrl The URL of the publisher's website. Optional.
      */
     public function __construct(
-        private readonly string             $announce,
-        private readonly ?array             $announceList,
-        private readonly ?string            $comment,
-        private readonly ?string            $createdBy,
+        private readonly string $announce,
+        private readonly ?array $announceList,
+        private readonly ?string $comment,
+        private readonly ?string $createdBy,
         private readonly ?DateTimeInterface $creationDate,
-        private readonly ?string             $encoding,
-        private readonly string             $length,
-        private readonly string             $name,
-        private readonly string             $pieceLength,
-        private readonly string             $pieces,
-        private readonly ?string            $publisher,
-        private readonly ?string            $publisherUrl,
-        private readonly ?string            $infoHash,
+        private readonly ?string $encoding,
+        private readonly string $length,
+        private readonly string $name,
+        private readonly string $pieceLength,
+        private readonly string $pieces,
+        private readonly ?string $publisher,
+        private readonly ?string $publisherUrl,
+        private readonly ?string $infoHash,
     ) {
     }
 

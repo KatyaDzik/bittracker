@@ -1,31 +1,37 @@
 <?php
 
-namespace App\Service;
+namespace App\Codec;
 
 use App\Dto\DecodedTorrentDataDto;
 use DateTime;
 use Symfony\Component\HttpFoundation\File\File;
 
-class BecodeService
+class BecodeTorrent implements BecodeTorrentInterface
 {
+    public function __construct(
+        private EncodeTorrentInterface $encoder
+    ) {
+    }
+
     private string $fileContent;
-    private int $position = 0;
+    private int $position;
 
     private ?DecodedTorrentDataDto $decodedTorrentData;
 
-    public function __construct(File $file)
+    public function becodeFile(File $file): DecodedTorrentDataDto
     {
+        $this->position = 0;
         $this->fileContent = $file->getContent();
         $decodedData = $this->bdecode();
 
-        $this->decodedTorrentData = new DecodedTorrentDataDto(
+        $decodedTorrentData = new DecodedTorrentDataDto(
             announce: $decodedData['announce'],
             announceList: $decodedData['announce-list'] ?? null,
             comment: $decodedData['comment'] ?? null,
             createdBy: $decodedData['created by'] ?? null,
             creationDate: $decodedData['creation date'] ? (new DateTime())->setTimestamp($decodedData['creation date']) : null,
             encoding: $decodedData['encoding'] ?? null,
-            length:  $decodedData['info']['length'],
+            length: $decodedData['info']['length'],
             name: $decodedData['info']['name'],
             pieceLength: $decodedData['info']['piece length'],
             pieces: $decodedData['info']['pieces'],
@@ -33,11 +39,13 @@ class BecodeService
             publisherUrl: $decodedData['publisher-url'] ?? null,
             infoHash: $this->getInfoHash($decodedData),
         );
+
+        return $decodedTorrentData;
     }
 
     protected function getChar(): string
     {
-        if (!$this->fileContent ) {
+        if (!$this->fileContent) {
             return false;
         }
 
@@ -148,7 +156,7 @@ class BecodeService
      */
     protected function decodeInt(): int
     {
-        $pos_e  = strpos($this->fileContent, 'e', $this->position);
+        $pos_e = strpos($this->fileContent, 'e', $this->position);
 
         $return = intval(substr($this->fileContent, $this->position, $pos_e - $this->position));
         $this->position = $pos_e + 1;
@@ -156,15 +164,8 @@ class BecodeService
         return $return;
     }
 
-    public function getDecodedTorrentData(): decodedTorrentDataDto
-    {
-        return $this->decodedTorrentData;
-    }
-
     function getInfoHash(array $decodedData, $raw = false): string
     {
-        $Encoder = new Encode();
-
-        return sha1($Encoder->encode($decodedData['info']), $raw);
+        return sha1($this->encoder->encode($decodedData['info']), $raw);
     }
 }

@@ -23,12 +23,11 @@ class TorrentFileController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    #[Route(path: '/', name: '_create',  methods: ['GET|POST'])]
+    #[Route(path: '/', name: '_create', methods: ['GET|POST'])]
     public function create(
         Request $request,
         TorrentFileService $torrentFileService
-    ): Response
-    {
+    ): Response {
         $torrent = new TorrentFile();
         $form = $this->createForm(CreateTorrentFileFormType::class, $torrent);
         $form->handleRequest($request);
@@ -51,14 +50,13 @@ class TorrentFileController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    #[Route(path: '/{id}', name: '_delete',  methods: ['DELETE'])]
+    #[Route(path: '/{id}', name: '_delete', methods: ['DELETE'])]
     public function delete(
         TorrentFile $torrentFile,
         TorrentFileService $torrentFileService,
-    ): Response
-    {
+    ): Response {
         $torrentFileService->deleteTorrentFile($torrentFile);
 
-        return  new JsonResponse(['success']);
+        return new JsonResponse(['success']);
     }
 }

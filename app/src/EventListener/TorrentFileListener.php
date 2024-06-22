@@ -12,8 +12,7 @@ class TorrentFileListener
 {
     public function __construct(
         protected readonly LoggerInterface $logger,
-    )
-    {
+    ) {
     }
 
     #[NoReturn]
@@ -27,7 +26,7 @@ class TorrentFileListener
     #[AsEventListener(event: LoadTorrentFileEvent::class)]
     public function loadTorrentFile(LoadTorrentFileEvent $event): void
     {
-        $this->logger->debug('New file loaded '. $event->getTorrentFile()->getTitle());
-      //  dd('load1', $event->getTorrentFile());
+        $this->logger->debug('New file loaded ' . $event->getTorrentFile()->getTitle());
+        //  dd('load1', $event->getTorrentFile());
     }
 }

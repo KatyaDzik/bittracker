@@ -26,7 +26,7 @@ class AdminAuthController extends AbstractController
 
         return $this->render('admin/admin_login.html.twig', [
             'last_user_email' => $lastUsername,
-            'error'         => $error,
+            'error' => $error,
         ]);
     }
 

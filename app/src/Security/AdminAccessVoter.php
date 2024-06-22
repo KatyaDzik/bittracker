@@ -13,8 +13,7 @@ class AdminAccessVoter extends Voter
 
     public function __construct(
         protected RequestStack $requestStack,
-    )
-    {
+    ) {
     }
 
     protected function supports(string $attribute, mixed $subject): bool

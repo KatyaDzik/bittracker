@@ -32,8 +32,7 @@ class AuthController extends AbstractController
         Request $request,
         Security $security,
         SluggerInterface $slugger,
-    ): Response
-    {
+    ): Response {
         $user = new User();
         $form = $this->createForm(UserCreateFormType::class, $user);
         $form->handleRequest($request);
@@ -49,10 +48,10 @@ class AuthController extends AbstractController
 
             $avatarFile = $form->get('avatarFile')->getData();
 
-            if($avatarFile) {
+            if ($avatarFile) {
                 $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$avatarFile->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
 
                 $avatarFile->move(
                     $this->getParameter('avatars_directory'),
@@ -87,7 +86,7 @@ class AuthController extends AbstractController
 
         return $this->render('auth/user/login.html.twig', [
             'last_user_email' => $lastUsername,
-            'error'         => $error,
+            'error' => $error,
         ]);
     }
 

@@ -48,8 +48,7 @@ class UserCreateFormType extends AbstractType
                     new PasswordMatch(),
                 ]
             ])
-            ->add('save', SubmitType::class)
-        ;
+            ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

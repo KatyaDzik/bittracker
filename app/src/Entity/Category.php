@@ -115,6 +115,6 @@ class Category
     {
         $this->torrents = $torrents;
 
-        return  $this;
+        return $this;
     }
 }

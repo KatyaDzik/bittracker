@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\RequestStrategy;
 
 /*
  * documentation on how UDP tracker protocol works
@@ -11,25 +11,31 @@ use App\Dto\AnnounceOutputDto;
 use App\Dto\DecodedTorrentDataDto;
 use App\Exception\TorrentException;
 
-class UDPTrackerProtocolService
+class UDPProtocolStrategy implements RequestStrategyInterface
 {
     const  CONNECT_ACTION = 0;
     const ANNOUNCE_ACTION = 1;
 
-    /**
-     * @throws TorrentException
-     */
-    public function __construct(DecodedTorrentDataDto $dataDto)
+    public function fetchAnnounceData(DecodedTorrentDataDto $torrentData, string $announce): ?AnnounceOutputDto
     {
-        $announce = $dataDto->getAnnounce();
-        $infoHash = $dataDto->getInfoHash();
+        if (!str_starts_with($announce, 'udp')) {
+            new TorrentException('unsupported announce format');
+        }
 
-        // Choose a (random) transaction ID. 32-bit integer
+        $infoHash = $torrentData->getInfoHash();
+
         $transactionId = random_int(0, 0xFFFFFFFF);
 
-        $connectionId = $this->geConnectionId($announce, $transactionId);
-        $announceData = $this->getAnnounce($connectionId, $transactionId, $announce, $infoHash);
-        dd($announceData);
+        try {
+            $connectionId = $this->geConnectionId($announce, $transactionId);
+            $announceData = $this->getAnnounce($connectionId, $transactionId, $announce, $infoHash);
+
+            return $announceData;
+        } catch (\Exception $exception) {
+            //todo куда-нибудь в логи пусть пишется
+        }
+
+        return null;
     }
 
     /*
@@ -51,11 +57,14 @@ class UDPTrackerProtocolService
             throw new TorrentException('Error reading response or reasonable response size ' . $errno . ' ' . $errstr);
         }
 
+        stream_set_timeout($socket, 3);
+
         // Send the packet.
         fwrite($socket, $packet);
 
         // Receive the packet.
         $response = fread($socket, 16);
+
         if ($response === false || strlen($response) < 16) {
             throw new TorrentException('Error reading response or reasonable response size');
         }
@@ -73,10 +82,13 @@ class UDPTrackerProtocolService
 
     /**
      * @throws TorrentException
-     * @throws RandomException
      */
-    public function getAnnounce(int $connectionId, int $transactionId, string $announce, string $infoHash): AnnounceOutputDto
-    {
+    public function getAnnounce(
+        int $connectionId,
+        int $transactionId,
+        string $announce,
+        string $infoHash
+    ): AnnounceOutputDto {
         //	20-byte string	peer_id
         $peer_id = '-PC0001-' . substr(md5(uniqid(mt_rand(), true)), 0, 12); // 20 байт
 
@@ -87,8 +99,7 @@ class UDPTrackerProtocolService
         $ip = 0;
         $key = random_int(0, 0xFFFFFFFF);
         $num_want = -1;
-        //todo получить из $announce
-        $port = 6969;
+        $port = $this->getServerPort($announce);
 
         $packet = pack('JNN', $connectionId, self::ANNOUNCE_ACTION, $transactionId) .
             $infoHash . $peer_id .
@@ -109,7 +120,7 @@ class UDPTrackerProtocolService
 
         $response_data = unpack('Naction/Ntransaction_id/Ninterval/Nleechers/Nseeders', substr($response, 0, 20));
 
-        if ($response_data['transaction_id']  === $transactionId &&
+        if ($response_data['transaction_id'] === $transactionId &&
             $response_data['action'] === self::ANNOUNCE_ACTION
         ) {
             return new AnnounceOutputDto(
@@ -122,5 +133,16 @@ class UDPTrackerProtocolService
         }
 
         throw new TorrentException('Something went wrong while receiving data');
+    }
+
+    private function getServerPort($url): ?int
+    {
+        $parsedUrl = parse_url($url);
+
+        if (isset($parsedUrl['port'])) {
+            return $parsedUrl['port'];
+        }
+
+        return null;
     }
 }

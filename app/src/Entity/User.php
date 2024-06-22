@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(fields:'email', message: 'This email is already in use.')]
+#[UniqueEntity(fields: 'email', message: 'This email is already in use.')]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     const ACTIVE_STATE = 'active';
@@ -78,7 +78,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**

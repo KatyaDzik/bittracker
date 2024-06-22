@@ -27,8 +27,7 @@ class CreateTorrentFileFormType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
             ])
-            ->add('save', SubmitType::class)
-        ;
+            ->add('save', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

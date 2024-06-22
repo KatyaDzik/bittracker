@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: AdminUserRepository::class)]
 #[ORM\Table(name: '`admin_user`')]
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(fields:'email', message: 'This email is already in use.')]
+#[UniqueEntity(fields: 'email', message: 'This email is already in use.')]
 class AdminUser implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
@@ -64,7 +64,7 @@ class AdminUser implements PasswordAuthenticatedUserInterface, UserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**

@@ -20,7 +20,7 @@ class ProfileController extends AbstractController
         $torrents = $this->getUser()->getTorrents();
 
         return $this->render('profile.html.twig', [
-            'torrents' => $torrents
+                'torrents' => $torrents
             ]
         );
     }

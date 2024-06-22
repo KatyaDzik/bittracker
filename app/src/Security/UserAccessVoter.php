@@ -13,17 +13,16 @@ class UserAccessVoter extends Voter
 
     public function __construct(
         protected RequestStack $requestStack,
-    )
-    {
+    ) {
     }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-       if ($attribute != self::USER) {
-           return false;
-       }
+        if ($attribute != self::USER) {
+            return false;
+        }
 
-       return true;
+        return true;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool

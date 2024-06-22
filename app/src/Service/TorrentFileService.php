@@ -19,14 +19,13 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class TorrentFileService
 {
     public function __construct(
-        protected readonly Filesystem                                 $filesystem,
-        protected readonly Security                                   $security,
-        protected readonly SluggerInterface                           $slugger,
-        protected readonly EntityManagerInterface                     $entityManager,
-        protected readonly EventDispatcherInterface                   $eventDispatcher,
+        protected readonly Filesystem $filesystem,
+        protected readonly Security $security,
+        protected readonly SluggerInterface $slugger,
+        protected readonly EntityManagerInterface $entityManager,
+        protected readonly EventDispatcherInterface $eventDispatcher,
         #[Autowire('%torrents_directory%')] protected readonly string $torrentsDirectory,
-    )
-    {
+    ) {
     }
 
     /**

@@ -8,10 +8,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 class LoadTorrentFileEvent extends Event
 {
     private TorrentFile $torrentFile;
+
     public function __construct(
         TorrentFile $torrentFile,
-    )
-    {
+    ) {
         $this->torrentFile = $torrentFile;
     }
 
