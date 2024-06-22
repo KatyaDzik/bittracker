@@ -9,14 +9,12 @@ use Symfony\Component\HttpFoundation\File\File;
 class BecodeTorrent implements BecodeTorrentInterface
 {
     public function __construct(
-        private EncodeTorrentInterface $encoder
+        private readonly EncodeTorrentInterface $encoder
     ) {
     }
 
     private string $fileContent;
     private int $position;
-
-    private ?DecodedTorrentDataDto $decodedTorrentData;
 
     public function becodeFile(File $file): DecodedTorrentDataDto
     {
@@ -24,7 +22,7 @@ class BecodeTorrent implements BecodeTorrentInterface
         $this->fileContent = $file->getContent();
         $decodedData = $this->bdecode();
 
-        $decodedTorrentData = new DecodedTorrentDataDto(
+        return new DecodedTorrentDataDto(
             announce: $decodedData['announce'],
             announceList: $decodedData['announce-list'] ?? null,
             comment: $decodedData['comment'] ?? null,
@@ -39,8 +37,6 @@ class BecodeTorrent implements BecodeTorrentInterface
             publisherUrl: $decodedData['publisher-url'] ?? null,
             infoHash: $this->getInfoHash($decodedData),
         );
-
-        return $decodedTorrentData;
     }
 
     protected function getChar(): string

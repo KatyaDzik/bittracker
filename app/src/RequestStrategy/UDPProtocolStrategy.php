@@ -10,12 +10,20 @@ namespace App\RequestStrategy;
 use App\Dto\AnnounceOutputDto;
 use App\Dto\DecodedTorrentDataDto;
 use App\Exception\TorrentException;
+use Exception;
 
 class UDPProtocolStrategy implements RequestStrategyInterface
 {
     const  CONNECT_ACTION = 0;
     const ANNOUNCE_ACTION = 1;
 
+    /**
+     * Retrieves the number of seeders and peers for the specified torrent announce
+     *
+     * @param DecodedTorrentDataDto $torrentData
+     * @param string $announce
+     * @return AnnounceOutputDto|null
+     */
     public function fetchAnnounceData(DecodedTorrentDataDto $torrentData, string $announce): ?AnnounceOutputDto
     {
         if (!str_starts_with($announce, 'udp')) {
@@ -23,25 +31,25 @@ class UDPProtocolStrategy implements RequestStrategyInterface
         }
 
         $infoHash = $torrentData->getInfoHash();
-
         $transactionId = random_int(0, 0xFFFFFFFF);
 
         try {
             $connectionId = $this->geConnectionId($announce, $transactionId);
-            $announceData = $this->getAnnounce($connectionId, $transactionId, $announce, $infoHash);
-
-            return $announceData;
-        } catch (\Exception $exception) {
+            return $this->getAnnounce($connectionId, $transactionId, $announce, $infoHash);
+        } catch (Exception $exception) {
             //todo куда-нибудь в логи пусть пишется
         }
 
         return null;
     }
 
-    /*
-     * Obtain a connection ID.
-     */
     /**
+     * This method initiates a UDP connection to a tracker and retrieves
+     *  the connection ID required for further communication.
+     *
+     * @param string $announce
+     * @param int $transactionId
+     * @return int
      * @throws TorrentException
      */
     public function geConnectionId(string $announce, int $transactionId): int
@@ -80,8 +88,19 @@ class UDPProtocolStrategy implements RequestStrategyInterface
         throw new TorrentException('Something went wrong while receiving data');
     }
 
+
     /**
+     * This method establishes a UDP connection to a tracker, sends a request
+     *  to fetch leechers and seeders counts, and parses the response to extract
+     *  the counts.
+     *
+     * @param int $connectionId
+     * @param int $transactionId
+     * @param string $announce
+     * @param string $infoHash
+     * @return AnnounceOutputDto
      * @throws TorrentException
+     * @throws \Random\RandomException
      */
     public function getAnnounce(
         int $connectionId,
@@ -124,9 +143,6 @@ class UDPProtocolStrategy implements RequestStrategyInterface
             $response_data['action'] === self::ANNOUNCE_ACTION
         ) {
             return new AnnounceOutputDto(
-                $response_data['action'],
-                $response_data['transaction_id'],
-                $response_data['interval'],
                 $response_data['leechers'],
                 $response_data['seeders'],
             );
@@ -135,6 +151,10 @@ class UDPProtocolStrategy implements RequestStrategyInterface
         throw new TorrentException('Something went wrong while receiving data');
     }
 
+    /**
+     * @param $url
+     * @return int|null
+     */
     private function getServerPort($url): ?int
     {
         $parsedUrl = parse_url($url);

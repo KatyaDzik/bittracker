@@ -3,6 +3,7 @@
 namespace App\Exception;
 
 use Exception;
+use Throwable;
 
 class TorrentException extends Exception
 {

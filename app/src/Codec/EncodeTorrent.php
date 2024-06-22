@@ -51,7 +51,6 @@ class EncodeTorrent implements EncodeTorrentInterface
             foreach ($array as $val) {
                 $return .= $this->encode($val);
             }
-            $return .= 'e';
         } else {
             // We build a Dictionary
             ksort($array, SORT_STRING);
@@ -60,8 +59,8 @@ class EncodeTorrent implements EncodeTorrentInterface
                 $return .= $this->encode(strval($key));
                 $return .= $this->encode($val);
             }
-            $return .= 'e';
         }
+        $return .= 'e';
 
         return $return;
     }
