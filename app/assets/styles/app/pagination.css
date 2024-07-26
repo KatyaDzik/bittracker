@@ -1,0 +1,10 @@
+div.pagination a
+{
+    text-decoration: none;
+    color: black;
+}
+
+div.pagination span.current, div.pagination a:hover
+{
+    color:  #4fde2f;
+}

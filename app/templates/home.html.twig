@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container filter">
+        {{ form_start(filter) }}
+        {{ form_row(filter.title) }}
+        {{ form_row(filter.category) }}
+        {{ form_row(filter.status) }}
+        {{ form_row(filter.submit) }}
+        {{ form_end(filter) }}
+    </div>
+
+    {% if torrents %}
+        <div class="container torrent-list">
+            {% for torrent in torrents %}
+                <div class="item" data-torrent="{{ torrent.id }}" data-title="{{ torrent.title }}">
+                    <a>
+                        <span style="width: 85%">{{ torrent.title }}</span>
+                        <span style="width: 13%">{{ torrent.status }}</span>
+                        <span style="width: 12%">{{ torrent.createdAt|date("d/m/Y") }}</span>
+                    </a>
+                </div>
+            {% endfor %}
+
+            <div class="navigation" style="text-align: center">
+                {{ knp_pagination_render(torrents) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block script %}
+    <script>
+        const modal = new Modal();
+        $(document).ready(function () {
+            $('.item').on('click', function (e) {
+                e.preventDefault();
+                let torrentId = $(this).data('torrent');
+                let torrentTitle = $(this).data('title');
+                modal.addTitle("<h2>Do you really want to download \"" + torrentTitle + "\" ?</h2>");
+                modal.confirm(() => {
+                    window.location.href = "/torrent/" + torrentId;
+                    // $.ajax({
+                    //     url: "/torrent/" + torrentId,
+                    //     type: 'GET',
+                    //     success: function (res) {
+                    //         console.log(res);
+                    //         alert(res);
+                    //     }
+                    // });
+                });
+                modal.open();
+            });
+        });
+    </script>
+{% endblock %}

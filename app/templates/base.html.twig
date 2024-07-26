@@ -8,8 +8,9 @@
             {{ encore_entry_script_tags('app') }}
     </head>
     <body>
-    <img class="stars" src="{{ asset('img/stars.jpg') }}" alt="Symfony!"/>
     {% include 'components/header.html.twig' %}
+    {% include 'components/modal.html.twig' %}
+
     <div class="content">
         {% block body %}
         {% endblock %}

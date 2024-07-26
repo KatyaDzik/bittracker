@@ -12,3 +12,6 @@ global.$ = global.jQuery = $;
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+import './styles/app/container.css';
+import './styles/app/pagination.css';
+import './styles/app/modal.css';

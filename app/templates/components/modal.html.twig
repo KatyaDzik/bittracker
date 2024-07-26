@@ -1,0 +1,63 @@
+<div class="modal-block">
+    <div id="modal-container" class="inactive">
+        <div class="modal-background">
+            <div class="modal">
+                <div id="modal-header"></div>
+                <div id="modal-content"></div>
+                <div id="modal-footer"><button id="modal-confirm-btn" class="base-btn">confirm</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    class Modal {
+        constructor() {
+            this.modalContainer = $('#modal-container');
+            this.modalHeader = $('#modal-header');
+            this.modalContent = $('#modal-content');
+            this.confirmButton = $('#modal-confirm-btn');
+            this.confirmCallback = null;
+
+            this.init();
+        }
+
+        init() {
+            $('.modal-background').on('click', (event) => {
+                if (!$(event.target).closest('.modal').length) {
+                    this.close();
+                }
+            });
+
+            this.confirmButton.on('click', () => {
+                if (this.confirmCallback) {
+                    this.confirmCallback();
+                }
+
+                this.close();
+            });
+        }
+
+        open() {
+            this.modalContainer.addClass('pushed');
+            this.modalContainer.removeClass('inactive');
+        }
+
+        close() {
+            this.modalHeader.empty();
+            this.modalContent.empty();
+            this.modalContainer.addClass('inactive');
+        }
+
+        addTitle(text) {
+            this.modalHeader.append(text);
+        }
+
+        addContent(text) {
+            this.modalContent.append(text);
+        }
+
+        confirm(confirmCallback) {
+            this.confirmCallback = confirmCallback;
+        }
+    }
+</script>

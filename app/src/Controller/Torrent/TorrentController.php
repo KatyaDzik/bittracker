@@ -9,8 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+#[Route('/torrent', name: 'torrent_')]
 class TorrentController extends AbstractController
 {
     public function __construct(
@@ -22,7 +26,7 @@ class TorrentController extends AbstractController
     }
 
 
-    #[Route('/torrent/info/{id}', name: 'torrent_info')]
+    #[Route('/info/{id}', name: 'info')]
     public function getTorrentInfo(TorrentFile $torrentFile)
     {
         $fullPath = $this->torrentsDirectory . '/' . $torrentFile->getFile();
@@ -51,5 +55,20 @@ class TorrentController extends AbstractController
         }
 
         return $serverUrls;
+    }
+
+    #[Route(path: '/{id}', name: 'download', methods: ['GET', 'POST'])]
+    public function downloadTorrent(TorrentFile $torrentFile): Response
+    {
+        $file = $this->torrentsDirectory . '/' . $torrentFile->getFile();
+
+        $fileResponse = new BinaryFileResponse($file);
+        $fileResponse->setContentDisposition(
+            HeaderUtils::DISPOSITION_ATTACHMENT,
+            $torrentFile->getFile()
+        );
+        $fileResponse->setFile($file);
+
+        return $fileResponse;
     }
 }

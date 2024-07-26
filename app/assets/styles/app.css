@@ -16,10 +16,16 @@
     font-family: 'Roboto';
 }
 
+* {
+    box-sizing:border-box;
+}
+
 body {
     background-image: url("../img/stars.jpg");
     margin: 0;
     padding: 0;
+    font-family: 'PixelifySans-Regular';
+    background-size: contain;
 }
 
 img.stars {
@@ -44,7 +50,7 @@ img.stars {
     }
 }
 
-/* Header*/
+/* Header */
 nav.menu {
     width: 80%;
     margin: 0 auto;
@@ -58,7 +64,7 @@ nav.menu ul {
     list-style-type: none;
 }
 
-nav.menu ul a,input {
+nav.menu ul a, nav.menu ul input {
     color: white;
     font-size: 24px;
     text-decoration: none;
@@ -66,6 +72,47 @@ nav.menu ul a,input {
     border: none;
 }
 
-nav.menu ul a:hover, input:hover{
+nav.menu ul a:hover, nav.menu ul input:hover {
     text-shadow: 0px 0px 15px white;
+}
+
+/* Body */
+div.content{
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* Body */
+
+input[type=text], select {
+    border: 1px solid;
+    border-radius: 5px;
+    height: 30px;
+    padding: 2px;
+    background-color : #ffffff;
+    font-size: 17pt;
+}
+
+button[type=submit] {
+    border: 1px solid;
+    border-radius: 5px;
+    height: 30px;
+    width: 80px;
+    font-size: 15pt;
+}
+
+button[type=submit]:hover {
+    background-color: #e8e8e8;
+}
+
+button.base-btn {
+    border: 1px solid;
+    border-radius: 5px;
+    height: 30px;
+    font-size: 15pt;
+    font-family: 'PixelifySans-Regular';
+}
+
+button.base-btn:hover {
+    background-color:  #dedede;
 }

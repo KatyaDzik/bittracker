@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\TorrentFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<TorrentFile>
@@ -16,8 +19,40 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TorrentFileRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private PaginatorInterface $paginator)
     {
         parent::__construct($registry, TorrentFile::class);
+    }
+
+    public function filter(
+        ?string $title = null,
+        ?Category $category = null,
+        ?string $status = null,
+        int $page = 1,
+        int $limit = 10
+    ): PaginationInterface {
+        $qb = $this->createQueryBuilder('t');
+
+        if ($title) {
+            $qb->andWhere('t.title LIKE :title')
+                ->setParameter('title', '%' . $title . '%');
+        }
+
+        if ($category) {
+            $qb
+                ->join('t.category', 'c')
+                ->andWhere('c = :category')
+                ->setParameter('category', $category);
+        }
+
+        if ($status) {
+            $qb
+                ->andWhere('LOWER(t.status) LIKE :status')
+                ->setParameter('status', '%' . strtolower($status) . '%');
+        }
+
+        $qb->orderBy('t.created_at', 'DESC');
+
+        return $this->paginator->paginate($qb, $page, $limit);
     }
 }
