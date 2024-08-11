@@ -68,8 +68,13 @@ class AuthController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
+        if ($form->isSubmitted() and !$form->isValid()) {
+            $errors = $form->getErrors(true, false);
+        }
+
         return $this->render('auth/user/register.html.twig', [
-            'form' => $form
+            'form' => $form,
+            'errors' => $errors ?? null
         ]);
     }
 

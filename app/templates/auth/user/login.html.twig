@@ -1,22 +1,27 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 style="color: #cccccc">Login Form!</h1>
+    <div class="container">
+        <h1 style="text-align: center">Login Form!</h1>
+        {% if error %}
+            {{ include('components/error_block.html.twig', { error: error, }) }}
+        {% endif %}
+        <div style="display: flex; justify-content: center">
+            <form action="{{ path('user_login') }}" method="post" class="base-form">
+                <div class="form-item">
+                    <label for="user_email">Email:</label>
+                    <input type="text" id="user_email" name="_email" value="{{ last_user_email }}">
+                </div>
 
-    <div>
-        <div>
-            {% if error%}
-                {{ error.message }}
-            {% endif %}
+                <div class="form-item">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="_password">
+                </div>
+
+                <div class="form-item">
+                    <button type="submit" class="base-btn" style="margin: 0 auto">login</button>
+                </div>
+            </form>
         </div>
-        <form action="{{ path('user_login') }}" method="post">
-            <label for="user_email">Email:</label>
-            <input type="text" id="user_email" name="_email" value="{{ last_user_email }}">
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="_password">
-
-            <button type="submit">login</button>
-        </form>
     </div>
 {% endblock %}

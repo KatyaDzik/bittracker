@@ -1,7 +1,7 @@
 <div class="header">
     <nav class="menu">
         <ul>
-            <li><a class="roboto-font"><span class="pixel-font">Torrent</span>Hub</a></li>
+            <li><a href="{{ path('home') }}" class="roboto-font"><span class="pixel-font">Torrent</span>Hub</a></li>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <form action="{{ path('user_logout') }}" method="post">
                     <input class="pixel-font" type="submit" value=logout>

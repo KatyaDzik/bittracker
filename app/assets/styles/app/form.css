@@ -1,0 +1,48 @@
+form.base-form {
+    padding: 15px;
+}
+
+input[type=text], input::file-selector-button, input[type=email], input[type=password], select {
+    border: 1px solid;
+    border-radius: 5px;
+    height: 30px;
+    padding: 2px;
+    background-color : #ffffff;
+    font-size: 17pt;
+}
+
+button[type=submit] {
+    border: 1px solid;
+    border-radius: 5px;
+    height: 30px;
+    width: 80px;
+    font-size: 15pt;
+}
+
+button[type=submit]:hover {
+    background-color: #e8e8e8;
+}
+
+button.base-btn {
+    border: 1px solid;
+    border-radius: 5px;
+    height: 30px;
+    font-size: 15pt;
+    font-family: 'PixelifySans-Regular';
+}
+
+button.base-btn:hover {
+    transform: scale(.9);
+    transition: .3s;
+}
+
+div.form-item{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+div.form-item label{
+    font-size: 17pt;
+    padding-right: 15px;
+}

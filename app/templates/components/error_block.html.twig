@@ -1,0 +1,16 @@
+<div class="error-block">
+    <div class="error-icon">
+        <img src="{{ asset('img/error_warning_icon.png') }}" width="50px" height="50px" alt="error_warning_icon">
+    </div>
+    <div class="errors">
+        {% if error is defined and error.message is defined %}
+            {{ error.message }}
+        {% endif %}
+
+        {% if errors is defined %}
+            {% for error in errors %}
+                {{ error }}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

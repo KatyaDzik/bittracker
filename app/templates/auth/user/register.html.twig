@@ -1,10 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register Form!{% endblock %}
+{#{% block body %}#}
+{#<div class="example-wrapper">#}
+{#    {{ form_errors(form) }}#}
+{#    {{ form(form) }}#}
+{#</div>#}
+{#{% endblock %}#}
 
 {% block body %}
-<div class="example-wrapper">
-    {{ form_errors(form) }}
-    {{ form(form) }}
-</div>
+    <div class="container">
+        <h1 style="text-align: center">Register Form!</h1>
+        {% if errors %}
+            {{ include('components/error_block.html.twig', { errors: errors, }) }}
+        {% endif %}
+        <div style="display: flex; justify-content: center">
+            {{ form_start(form) }}
+            <div class="form-item">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+            </div>
+
+            <div class="form-item">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
+
+            <div class="form-item">
+                {{ form_label(form.avatarFile) }}
+                {{ form_widget(form.avatarFile) }}
+            </div>
+
+            <div class="form-item">
+                {{ form_label(form.password) }}
+                {{ form_widget(form.password) }}
+            </div>
+
+            <div class="form-item">
+                {{ form_label(form.confirm_password) }}
+                {{ form_widget(form.confirm_password) }}
+            </div>
+
+            <div class="form-item">
+                {{ form_widget(form.save, {'attr': {'class': 'base-btn', 'style': 'margin: 0 auto'}}) }}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

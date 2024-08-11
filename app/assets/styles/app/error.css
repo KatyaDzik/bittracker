@@ -1,0 +1,11 @@
+div.error-block {
+    display: flex;
+    background-color: #e08d8d;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+div.error-block div.error-icon {
+    margin-right: 25px;
+}

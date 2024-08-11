@@ -11,6 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -61,6 +62,10 @@ class TorrentController extends AbstractController
     public function downloadTorrent(TorrentFile $torrentFile): Response
     {
         $file = $this->torrentsDirectory . '/' . $torrentFile->getFile();
+
+        if (!file_exists($file)) {
+            throw new NotFoundHttpException();
+        }
 
         $fileResponse = new BinaryFileResponse($file);
         $fileResponse->setContentDisposition(
