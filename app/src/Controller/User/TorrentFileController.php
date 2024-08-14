@@ -39,8 +39,13 @@ class TorrentFileController extends AbstractController
             return $this->redirectToRoute('profile_view');
         }
 
+        if ($form->isSubmitted() and !$form->isValid()) {
+            $errors = $form->getErrors(true, false);
+        }
+
         return $this->render('create_torrent.html.twig', [
             'form' => $form,
+            'errors' => $errors ?? null,
         ]);
     }
 

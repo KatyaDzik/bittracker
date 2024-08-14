@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-#[Route('/torrent', name: 'torrent_')]
+#[Route('/torrent/file', name: 'torrent_')]
 class TorrentController extends AbstractController
 {
     public function __construct(

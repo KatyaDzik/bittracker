@@ -1,12 +1,45 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% if success_msg is defined %}
-        <h2>{{ success_msg }}</h2>
-    {% endif %}
+    <div class="container">
+        {% if success_msg is defined %}
+            <h2>{{ success_msg }}</h2>
+        {% endif %}
 
-    <div style="background: #0a53be " class="example-wrapper">
-        {{ form_errors(form) }}
-        {{ form(form) }}
+        <div>
+            <h1 style="text-align: center">Load Torrent File 👇</h1>
+            {% if errors %}
+                {{ include('components/error_block.html.twig', { errors: errors, }) }}
+            {% endif %}
+
+            <div style="display: flex; justify-content: center">
+                {{ form_start(form) }}
+                <div class="form-item">
+                    {{ form_label(form.title) }}
+                    {{ form_widget(form.title) }}
+                </div>
+
+                <div class="form-item">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description) }}
+                </div>
+
+                <div class="form-item">
+                    {{ form_label(form.torrentFile) }}
+                    {{ form_widget(form.torrentFile) }}
+                </div>
+
+                <div class="form-item">
+                    {{ form_label(form.category) }}
+                    {{ form_widget(form.category, {'attr': {'style': 'width: 100%'}} ) }}
+                </div>
+
+                <div class="form-item">
+                    {{ form_widget(form.save, {'attr': {'class': 'base-btn', 'style': 'margin: 0 auto'}}) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
     </div>
 {% endblock %}
