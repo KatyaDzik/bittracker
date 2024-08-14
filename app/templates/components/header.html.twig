@@ -6,7 +6,8 @@
                 <form action="{{ path('user_logout') }}" method="post">
                     <input class="pixel-font" type="submit" value=logout>
                 </form>
-                <li><a class="pixel-font" href="{{ path('torrent_file_create') }}">{{ 'Load Torrent'|trans }}</a></li>
+{#                <li><a class="pixel-font" href="{{ path('torrent_file_create') }}">{{ 'Load Torrent'|trans }}</a></li>#}
+                <li><a class="pixel-font" href="{{ path('profile_view') }}">{{ 'Profile'|trans }}</a></li>
             {% else %}
                 <div style="display: flex; width: 15%; justify-content: space-between;">
                     <li><a class="pixel-font" href="{{ path('user_login') }}">{{ 'Sign in'|trans }}</a></li>

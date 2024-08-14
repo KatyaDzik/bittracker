@@ -8,6 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<TorrentFile>
@@ -28,6 +29,7 @@ class TorrentFileRepository extends ServiceEntityRepository
         ?string $title = null,
         ?Category $category = null,
         ?string $status = null,
+        ?UserInterface $user = null,
         int $page = 1,
         int $limit = 10
     ): PaginationInterface {
@@ -49,6 +51,13 @@ class TorrentFileRepository extends ServiceEntityRepository
             $qb
                 ->andWhere('LOWER(t.status) LIKE :status')
                 ->setParameter('status', '%' . strtolower($status) . '%');
+        }
+
+        if ($user) {
+            $qb
+                ->join('t.author', 'a')
+                ->andWhere('a = :author')
+                ->setParameter('author', $user);
         }
 
         $qb->orderBy('t.created_at', 'DESC');

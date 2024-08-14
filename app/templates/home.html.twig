@@ -38,15 +38,7 @@
                 let torrentTitle = $(this).data('title');
                 modal.addTitle("<h2>Do you really want to download \"" + torrentTitle + "\" ?</h2>");
                 modal.confirm(() => {
-                    window.location.href = "/torrent/" + torrentId;
-                    // $.ajax({
-                    //     url: "/torrent/" + torrentId,
-                    //     type: 'GET',
-                    //     success: function (res) {
-                    //         console.log(res);
-                    //         alert(res);
-                    //     }
-                    // });
+                    window.location.href = "/torrent/file/" + torrentId;
                 });
                 modal.open();
             });

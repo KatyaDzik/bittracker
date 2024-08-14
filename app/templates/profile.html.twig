@@ -5,32 +5,72 @@
         <h2>{{ success_msg }}</h2>
     {% endif %}
 
-    <div style="background: #0a53be " class="example-wrapper">
-        <table>
-            <tr>
-                <th>{{ 'Torrent'|trans }}</th>
-                <th></th>
-            </tr>
-            {% for torrent in torrents %}
-                <tr>
-                    <td>{{ torrent.title }}</td>
-                    <td><button data-id="{{ torrent.id }}" id="delete_torrent_btn">{{ 'Delete'|trans }}</button></td>
-                </tr>
-            {% endfor %}
-        </table>
+    <div class="container" style="margin-bottom: 30px">
+
     </div>
+
+    {% if torrents %}
+        <div class="container torrent-list">
+            <div class="filter" style="margin-bottom: 40px">
+                {{ form_start(filter) }}
+                {{ form_row(filter.title) }}
+                {{ form_row(filter.category) }}
+                {{ form_row(filter.status) }}
+                {{ form_row(filter.submit) }}
+                {{ form_end(filter) }}
+            </div>
+            <hr>
+            {% for torrent in torrents %}
+                <div class="item" data-torrent="{{ torrent.id }}" data-title="{{ torrent.title }}">
+                    <a>
+                        <span style="width: 54%">{{ torrent.title }}</span>
+                        <span style="width: 14%">{{ torrent.status }}</span>
+                        <span style="width: 14%">{{ torrent.createdAt|date("d/m/Y") }}</span>
+                        <button style="width: 8%; margin-right: 15px"class="base-btn delete" data-torrent-id="{{ torrent.id }}">delete</button>
+                        <button style="width: 8%"class="base-btn edit" data-torrent-id="{{ torrent.id }}">edit</button>
+                    </a>
+                </div>
+            {% endfor %}
+
+            <div class="navigation" style="text-align: center">
+                {{ knp_pagination_render(torrents) }}
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 {% block script %}
+
+{#    todo : шляпа с модалками.#}
+    <script>
+        $(document).ready(function () {
+            const modal = new Modal();
+            $('.item').on('click', function (e) {
+                e.preventDefault();
+                let torrentId = $(this).data('torrent');
+                let torrentTitle = $(this).data('title');
+                modal.addTitle("<h2>Do you really want to download \"" + torrentTitle + "\" ?</h2>");
+                modal.confirm(() => {
+                    window.location.href = "/torrent/file/" + torrentId;
+                });
+                modal.open();
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
-            $('#delete_torrent_btn').on('click', function () {
-                let id = $(this).data('id');
-                let url = `/torrent/file/${id}`;
-                let isConfirmed = confirm("{{ 'Delete a file?'|trans }}")
-                if (isConfirmed) {
+            const modal = new Modal();
+            $('.delete').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                let torrentId = $(this).data('torrent-id');
+                modal.addTitle("<h2>Do you really want to delete \"" + torrentId + "\" ?</h2>");
+
+                modal.confirm(() => {
+                    let url = `/torrent/file/${torrentId}`;
                     $.ajax({
                         url: url,
-                        type: "DELETE",
+                        type: 'DELETE',
                         success: function () {
                             location.reload();
                         },
@@ -38,7 +78,7 @@
                             console.log(response)
                         },
                     });
-                }
+                });
             });
         });
     </script>

@@ -2,7 +2,7 @@ form.base-form {
     padding: 15px;
 }
 
-input[type=text], input::file-selector-button, input[type=email], input[type=password], select {
+input[type=text], input::file-selector-button, input[type=email], input[type=password], select, textarea {
     border: 1px solid;
     border-radius: 5px;
     height: 30px;

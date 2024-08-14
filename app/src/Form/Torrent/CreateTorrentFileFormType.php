@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class CreateTorrentFileFormType extends AbstractType
 {
@@ -22,6 +23,14 @@ class CreateTorrentFileFormType extends AbstractType
                 'label' => 'Torrent',
                 'mapped' => false,
                 'required' => false,
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => [
+                            'application/x-bittorrent',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a file with the extension .torrent',
+                    ])
+                ],
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
