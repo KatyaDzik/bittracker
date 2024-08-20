@@ -17,3 +17,4 @@ import './styles/app/pagination.css';
 import './styles/app/modal.css';
 import './styles/app/form.css';
 import './styles/app/error.css';
+import './styles/app/success.css';

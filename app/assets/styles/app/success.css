@@ -1,0 +1,11 @@
+div.success-block {
+    display: flex;
+    background-color: #8de0a0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+div.success-block div.success-icon {
+    margin-right: 25px;
+}

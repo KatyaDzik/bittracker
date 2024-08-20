@@ -38,7 +38,7 @@
                 let torrentTitle = $(this).data('title');
                 modal.addTitle("<h2>Do you really want to download \"" + torrentTitle + "\" ?</h2>");
                 modal.confirm(() => {
-                    window.location.href = "/torrent/file/" + torrentId;
+                    window.location.href = "/torrent/file/download/" + torrentId;
                 });
                 modal.open();
             });

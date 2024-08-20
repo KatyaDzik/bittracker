@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container" style="width: 50%">
+{#        ДЛЯ АВТОРА ФАЙЛА ОТОБРАЖАЕМ ФОРМУ #}
+        {% if app.user is same as torrent.author %}
+            <div>
+                {% if errors %}
+                    {{ include('components/error_block.html.twig', { errors: errors, }) }}
+                {% endif %}
+
+                {% if success_msg %}
+                    {{ include('components/success_block.html.twig', { success_msg: success_msg, }) }}
+                {% endif %}
+
+                <div  style="display: flex; justify-content: center">
+                    {{ form_start(form) }}
+                    <div class="form-item">
+                        {{ form_label(form.title) }}
+                        {{ form_widget(form.title) }}
+                    </div>
+
+                    <div class="form-item">
+                        {{ form_label(form.description) }}
+                        {{ form_widget(form.description) }}
+                    </div>
+
+                    <a class="pixel-font" href="{{ path('torrent_download', {id: torrent.id}) }}">{{ torrent.title }}</a>
+
+                    <div class="form-item">
+                        {{ form_label(form.category) }}
+                        {{ form_widget(form.category, {'attr': {'style': 'width: 68%'}} ) }}
+                    </div>
+
+                    <div class="form-item">
+                        {{ form_widget(form.save, {'attr': {'class': 'base-btn', 'style': 'margin: 0 auto'}}) }}
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        {% else %}
+            <h2>{{ torrent.title }}</h2>
+            <p>{{ torrent.description }}</p>
+            <h4>Category: {{ torrent.category.name }} </h4>
+            <a class="pixel-font" href="{{ path('torrent_download', {id: torrent.id}) }}">{{ torrent.title }}</a>
+        {% endif %}
+    </div>
+
+{% endblock %}

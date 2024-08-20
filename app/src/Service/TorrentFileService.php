@@ -84,4 +84,19 @@ class TorrentFileService
             throw new Exception('Error when deleting file. ' . $exception->getMessage());
         }
     }
+
+    /**
+     * This function updated a record containing torrentFile information
+     *
+     * @param TorrentFile $torrentFile
+     * @throws Exception
+     */
+    public function updateTorrentFile(TorrentFile $torrentFile): void
+    {
+        try {
+            $this->entityManager->flush($torrentFile);
+        } catch (Exception $exception) {
+            throw new Exception('Error when updating file. ' . $exception->getMessage());
+        }
+    }
 }
