@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container" style="width: 50%">
+    <div class="container" style="width: 60%; position: relative">
 {#        ДЛЯ АВТОРА ФАЙЛА ОТОБРАЖАЕМ ФОРМУ #}
         {% if app.user is same as torrent.author %}
             <div>
@@ -13,7 +13,7 @@
                     {{ include('components/success_block.html.twig', { success_msg: success_msg, }) }}
                 {% endif %}
 
-                <div  style="display: flex; justify-content: center">
+                <div  style="display: flex; justify-content: start">
                     {{ form_start(form) }}
                     <div class="form-item">
                         {{ form_label(form.title) }}
@@ -22,7 +22,7 @@
 
                     <div class="form-item">
                         {{ form_label(form.description) }}
-                        {{ form_widget(form.description) }}
+                        {{ form_widget(form.description, {'attr': {'row': '10'}}) }}
                     </div>
 
                     <a class="pixel-font" href="{{ path('torrent_download', {id: torrent.id}) }}">{{ torrent.title }}</a>
@@ -38,6 +38,11 @@
 
                     {{ form_end(form) }}
                 </div>
+            </div>
+            <div class="trash-icon">
+                <a href="#">
+                    <img src="{{ asset('img/trash_icon.png') }}" alt="trash-img">
+                </a>
             </div>
         {% else %}
             <h2>{{ torrent.title }}</h2>

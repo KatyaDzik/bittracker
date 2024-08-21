@@ -7,7 +7,7 @@ input[type=text], input::file-selector-button, input[type=email], input[type=pas
     border-radius: 5px;
     height: 30px;
     padding: 2px;
-    background-color : #ffffff;
+    background-color: #ffffff;
     font-size: 17pt;
 }
 
@@ -36,13 +36,50 @@ button.base-btn:hover {
     transition: .3s;
 }
 
-div.form-item{
+div.form-item {
     display: flex;
     justify-content: space-between;
     margin: 10px 0;
 }
 
-div.form-item label{
+div.form-item label {
     font-size: 17pt;
     padding-right: 15px;
+}
+
+/* */
+.trash-icon {
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
+    width: 65px; /* Устанавливаем ширину для контейнера */
+    height: 65px; /* Устанавливаем высоту для контейнера */
+}
+
+.trash-icon img {
+    transition: opacity 0.3s ease-in-out;
+    width: 100%; /* Теперь картинка будет масштабироваться в пределах контейнера */
+    height: 100%;
+}
+
+.trash-icon::before {
+    min-height: 65px;
+    background-position: center center;
+    background-image: url("../../img/filled_trash_icon.png");
+    /*background-size: 65px 65px;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*max-width: 65px !important; !* Масштабируем псевдоэлемент по размеру контейнера *!*/
+    /*max-height: 65px !important;*/
+    /*opacity: 1;*/
+    transition: opacity 0.3s ease-in-out;
+}
+
+.trash-icon:hover img {
+    opacity: 0;
+}
+
+.trash-icon:hover::before {
+    opacity: 1;
 }
