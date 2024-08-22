@@ -1,4 +1,4 @@
-div.container{
+div.container {
     width: 100%;
     height: auto;
     padding: 50px;
@@ -22,19 +22,16 @@ div.torrent-list div.item a:hover {
     color: #4fde2f;
 }
 
-div.filter form
-{
+div.filter form {
     display: flex;
     justify-content: space-between;
 }
 
-div.filter form div label
-{
+div.filter form div label {
     padding-right: 4px;
     font-size: 17pt;
 }
 
-div.filter form div input, div.filter form div select
-{
+div.filter form div input, div.filter form div select {
     width: 250px;
 }
