@@ -33,7 +33,7 @@ class DecodedTorrentDataDto
         private readonly ?string $createdBy,
         private readonly ?DateTimeInterface $creationDate,
         private readonly ?string $encoding,
-        private readonly string $length,
+        private readonly ?string $length,
         private readonly string $name,
         private readonly string $pieceLength,
         private readonly string $pieces,

@@ -29,7 +29,7 @@ class BecodeTorrent implements BecodeTorrentInterface
             createdBy: $decodedData['created by'] ?? null,
             creationDate: $decodedData['creation date'] ? (new DateTime())->setTimestamp($decodedData['creation date']) : null,
             encoding: $decodedData['encoding'] ?? null,
-            length: $decodedData['info']['length'],
+            length: $decodedData['info']['length'] ?? null,
             name: $decodedData['info']['name'],
             pieceLength: $decodedData['info']['piece length'],
             pieces: $decodedData['info']['pieces'],

@@ -105,7 +105,7 @@ class TorrentController extends AbstractController
     }
 
     #[Route('/meta/info/{id}', name: 'meta_info')]
-    public function getTorrentMetaInfo(TorrentFile $torrentFile)
+    public function getTorrentMetaInfo(TorrentFile $torrentFile): Response
     {
         $fullPath = $this->torrentsDirectory . '/' . $torrentFile->getFile();
         $file = new File($fullPath);
@@ -115,10 +115,14 @@ class TorrentController extends AbstractController
         $seeders = 0;
         foreach ($announceList as $announce) {
             if (str_starts_with($announce, 'udp')) {
-                $announceOutputDto = $this->UDPProtocolStrategy->fetchAnnounceData($decodedData, $announce);
-                $leechers += $announceOutputDto?->getLeechers();
-                $seeders += $announceOutputDto?->getSeeders();
+                $announceOutputDto = $this->UDPProtocolStrategy->fetchScrapeData($decodedData, $announce);
+//                $leechers += $announceOutputDto?->getLeechers();
+//                $seeders += $announceOutputDto?->getSeeders();
             }
         }
+
+        dd($announceOutputDto);
+
+        return new Response();
     }
 }

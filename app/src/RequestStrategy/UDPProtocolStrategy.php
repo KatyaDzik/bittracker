@@ -15,7 +15,7 @@ use Exception;
 class UDPProtocolStrategy implements RequestStrategyInterface
 {
     const  CONNECT_ACTION = 0;
-    const ANNOUNCE_ACTION = 1;
+    const SCRAPE_ACTION = 2;
 
     /**
      * Retrieves the number of seeders and peers for the specified torrent announce
@@ -24,18 +24,16 @@ class UDPProtocolStrategy implements RequestStrategyInterface
      * @param string $announce
      * @return AnnounceOutputDto|null
      */
-    public function fetchAnnounceData(DecodedTorrentDataDto $torrentData, string $announce): ?AnnounceOutputDto
+    public function fetchScrapeData(DecodedTorrentDataDto $torrentData, string $announce): ?AnnounceOutputDto
     {
         if (!str_starts_with($announce, 'udp')) {
             new TorrentException('unsupported announce format');
         }
 
         $infoHash = $torrentData->getInfoHash();
-        $transactionId = random_int(0, 0xFFFFFFFF);
 
         try {
-            $connectionId = $this->geConnectionId($announce, $transactionId);
-            return $this->getAnnounce($connectionId, $transactionId, $announce, $infoHash);
+            return $this->getScrapeData($announce, $infoHash);
         } catch (Exception $exception) {
             //todo куда-нибудь в логи пусть пишется
         }
@@ -44,125 +42,72 @@ class UDPProtocolStrategy implements RequestStrategyInterface
     }
 
     /**
-     * This method initiates a UDP connection to a tracker and retrieves
-     *  the connection ID required for further communication.
+     * This method establishes a socket connection to a given tracker URL.
+     * It first sends a packet to obtain the connectionId required for further communication.
+     * Once the connectionId is received, the method then sends a scrape request packet
+     * to retrieve statistics about the torrent, including the number of seeders and leechers.
      *
-     * @param string $announce
-     * @param int $transactionId
-     * @return int
-     * @throws TorrentException
-     */
-    public function geConnectionId(string $announce, int $transactionId): int
-    {
-        // todo генерировать $connectionId
-        // Choose a (random) connection ID. 64-bit integer
-        $connectionId = 0x41727101980;
-
-        $packet = pack('JNN', $connectionId, self::CONNECT_ACTION, $transactionId);
-        $socket = stream_socket_client($announce, $errno, $errstr, 2);
-
-        if (!$socket) {
-            throw new TorrentException('Error reading response or reasonable response size ' . $errno . ' ' . $errstr);
-        }
-
-        stream_set_timeout($socket, 3);
-
-        // Send the packet.
-        fwrite($socket, $packet);
-
-        // Receive the packet.
-        $response = fread($socket, 16);
-
-        if ($response === false || strlen($response) < 16) {
-            throw new TorrentException('Error reading response or reasonable response size');
-        }
-
-        $response_data = unpack('Naction/Ntransaction_id/Jconnection_id', $response);
-
-        if ($response_data['action'] === self::CONNECT_ACTION &&
-            $response_data['transaction_id'] === $transactionId
-        ) {
-            return $response_data['connection_id'];
-        }
-
-        throw new TorrentException('Something went wrong while receiving data');
-    }
-
-
-    /**
-     * This method establishes a UDP connection to a tracker, sends a request
-     *  to fetch leechers and seeders counts, and parses the response to extract
-     *  the counts.
-     *
-     * @param int $connectionId
-     * @param int $transactionId
      * @param string $announce
      * @param string $infoHash
      * @return AnnounceOutputDto
      * @throws TorrentException
      * @throws \Random\RandomException
      */
-    public function getAnnounce(
-        int $connectionId,
-        int $transactionId,
-        string $announce,
-        string $infoHash
-    ): AnnounceOutputDto {
-        //	20-byte string	peer_id
-        $peer_id = '-PC0001-' . substr(md5(uniqid(mt_rand(), true)), 0, 12); // 20 байт
-
-        $downloaded = 0;
-        $left = 0; // Количество байт, которое осталось скачать
-        $uploaded = 0;
-        $event = 0; // 0: none,   1: completed,  2: started,   3: stopped
-        $ip = 0;
-        $key = random_int(0, 0xFFFFFFFF);
-        $num_want = -1;
-        $port = $this->getServerPort($announce);
-
-        $packet = pack('JNN', $connectionId, self::ANNOUNCE_ACTION, $transactionId) .
-            $infoHash . $peer_id .
-            pack('J3N2N2n', $downloaded, $left, $uploaded, $event, $ip, $key, $num_want, $port);
-
+    public function getScrapeData(string $announce, string $infoHash): AnnounceOutputDto
+    {
+        $transactionId = random_int(0, 0xFFFFFFFF);
+        $connectionId = 0x41727101980;
+        $connectionPacket = pack('JNN', $connectionId, self::CONNECT_ACTION, $transactionId);
         $socket = stream_socket_client($announce, $errno, $errstr, 2);
 
         if (!$socket) {
             throw new TorrentException('Error reading response or reasonable response size ' . $errno . ' ' . $errstr);
         }
 
-        fwrite($socket, $packet);
+        stream_set_timeout($socket, 2);
+        fwrite($socket, $connectionPacket);
+        $response = fread($socket, 16);
 
-        $response = fread($socket, 1024);
-        if ($response === false || strlen($response) < 20) {
+        if ($response === false || strlen($response) < 16) {
             throw new TorrentException('Error reading response or reasonable response size');
         }
 
-        $response_data = unpack('Naction/Ntransaction_id/Ninterval/Nleechers/Nseeders', substr($response, 0, 20));
+        $responseData = unpack('Naction/Ntransaction_id/Jconnection_id', $response);
 
-        if ($response_data['transaction_id'] === $transactionId &&
-            $response_data['action'] === self::ANNOUNCE_ACTION
+        if ($responseData['action'] !== self::CONNECT_ACTION ||
+            $responseData['transaction_id'] !== $transactionId
         ) {
-            return new AnnounceOutputDto(
-                $response_data['leechers'],
-                $response_data['seeders'],
-            );
+            throw new TorrentException('Something went wrong while receiving data');
         }
 
-        throw new TorrentException('Something went wrong while receiving data');
-    }
+        $connectionId = $responseData['connection_id'];
 
-    /**
-     * @param $url
-     * @return int|null
-     */
-    private function getServerPort($url): ?int
-    {
-        $parsedUrl = parse_url($url);
+        $scrapePacket = pack(
+            'JNNa20',
+            $connectionId,
+            self::SCRAPE_ACTION,
+            $transactionId,
+            hex2bin($infoHash)
+        );
 
-        if (isset($parsedUrl['port'])) {
-            return $parsedUrl['port'];
+        fwrite($socket, $scrapePacket);
+        $response = fread($socket, 1024);
+
+        if ($response === false || strlen($response) < 8) {
+            throw new TorrentException('Error reading response or reasonable response size');
         }
 
-        return null;
+        $responseData = unpack('Naction/Ntransaction_id', substr($response, 0, 8));
+
+        if ($responseData['transaction_id'] !== $transactionId || $responseData['action'] !== self::SCRAPE_ACTION) {
+            throw new TorrentException('Something went wrong while receiving data');
+        }
+
+        $torrentData = unpack('Nseeders/Ncompleted/Nleechers', substr($response, 8, 12));;
+
+        return new AnnounceOutputDto(
+            $torrentData['leechers'],
+            $torrentData['seeders'],
+        );
     }
 }
