@@ -1,6 +1,6 @@
 <?php
 
-namespace App\RequestStrategy;
+namespace App\TorrentRequestStrategy;
 
 use App\Dto\AnnounceOutputDto;
 use App\Dto\DecodedTorrentDataDto;

@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\Exception\NoFileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class TorrentFileService
+class CRUDTorrentFileService
 {
     public function __construct(
         protected readonly Filesystem $filesystem,

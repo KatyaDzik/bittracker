@@ -1,6 +1,6 @@
 <?php
 
-namespace App\RequestStrategy;
+namespace App\TorrentRequestStrategy;
 
 /*
  * documentation on how UDP tracker protocol works

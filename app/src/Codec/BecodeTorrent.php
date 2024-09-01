@@ -24,7 +24,7 @@ class BecodeTorrent implements BecodeTorrentInterface
 
         return new DecodedTorrentDataDto(
             announce: $decodedData['announce'],
-            announceList: $decodedData['announce-list'] ?? null,
+            announceList: $decodedData['announce-list'] ? $this->reformatAnnounceList($decodedData['announce-list']) : null,
             comment: $decodedData['comment'] ?? null,
             createdBy: $decodedData['created by'] ?? null,
             creationDate: $decodedData['creation date'] ? (new DateTime())->setTimestamp($decodedData['creation date']) : null,
@@ -163,5 +163,18 @@ class BecodeTorrent implements BecodeTorrentInterface
     function getInfoHash(array $decodedData, $raw = false): string
     {
         return sha1($this->encoder->encode($decodedData['info']), $raw);
+    }
+
+    private function reformatAnnounceList(array $announceLists): array
+    {
+        $serverUrls = [];
+
+        foreach ($announceLists as $announceList) {
+            foreach ($announceList as $announce) {
+                $serverUrls[] = $announce;
+            }
+        }
+
+        return $serverUrls;
     }
 }

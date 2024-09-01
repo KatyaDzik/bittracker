@@ -53,6 +53,18 @@ services:
       - '${FORWARD_DB_PORT}:${FORWARD_DB_PORT}'
     networks:
       - bittracker
+  redis-db:
+    image: redis:7.4.0-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis-db:/root/redis
+    environment:
+      - REDIS_PASSWORD=redis
+      - REDIS_PORT=6379
+    networks:
+      - bittracker
 networks:
   bittracker:
     driver: bridge

@@ -64,4 +64,12 @@ class TorrentFileRepository extends ServiceEntityRepository
 
         return $this->paginator->paginate($qb, $page, $limit);
     }
+
+    public function getAllIds(): array
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t.id')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
 }

@@ -39,6 +39,13 @@ RUN apk add --update linux-headers \
     && pecl install xdebug-3.3.0 \
     && docker-php-ext-enable xdebug
 
+# Install Redis ext
+RUN apk add --no-cache pcre-dev $PHPIZE_DEPS && \
+    pecl update-channels && \
+    pecl install redis && \
+    docker-php-ext-enable redis && \
+    apk del $PHPIZE_DEPS
+
 COPY docker/php/xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
 
 USER user

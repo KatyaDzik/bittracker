@@ -4,7 +4,7 @@ namespace App\Controller\User;
 
 use App\Entity\TorrentFile;
 use App\Form\Torrent\CreateTorrentFileFormType;
-use App\Service\TorrentFileService;
+use App\Service\CRUDTorrentFileService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,14 +19,14 @@ class TorrentFileController extends AbstractController
 {
     /**
      * @param Request $request
-     * @param TorrentFileService $torrentFileService
+     * @param CRUDTorrentFileService $torrentFileService
      * @return Response
      * @throws Exception
      */
     #[Route(path: '/', name: '_create', methods: ['GET|POST'])]
     public function create(
         Request $request,
-        TorrentFileService $torrentFileService
+        CRUDTorrentFileService $torrentFileService
     ): Response {
         $torrent = new TorrentFile();
         $form = $this->createForm(CreateTorrentFileFormType::class, $torrent);
@@ -51,14 +51,14 @@ class TorrentFileController extends AbstractController
 
     /**
      * @param TorrentFile $torrentFile
-     * @param TorrentFileService $torrentFileService
+     * @param CRUDTorrentFileService $torrentFileService
      * @return Response
      * @throws Exception
      */
     #[Route(path: '/{id}', name: '_delete', methods: ['DELETE'])]
     public function delete(
         TorrentFile $torrentFile,
-        TorrentFileService $torrentFileService,
+        CRUDTorrentFileService $torrentFileService,
     ): Response {
         $torrentFileService->deleteTorrentFile($torrentFile);
 
