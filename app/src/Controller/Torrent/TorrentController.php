@@ -3,12 +3,14 @@
 namespace App\Controller\Torrent;
 
 use App\Entity\TorrentFile;
+use App\Event\LoadTorrentFileEvent;
 use App\Form\Torrent\EditTorrentFileFormType;
 use App\Service\SwarmDataService;
 use App\Service\CRUDTorrentFileService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +41,7 @@ class TorrentController extends AbstractController
         TorrentFile $torrentFile,
         Request $request,
         CRUDTorrentFileService $torrentFileService,
+        SwarmDataService $swarmDataService,
     ): Response {
         $form = $this->createForm(EditTorrentFileFormType::class, $torrentFile);
         $form->handleRequest($request);
@@ -55,11 +58,15 @@ class TorrentController extends AbstractController
             $errors = $form->getErrors(true, false);
         }
 
+        $swarmInfo = $swarmDataService->getSwarmInfo($torrentFile);
+
         return $this->render('torrent_profile.html.twig', [
             'errors' => $errors ?? null,
             'form' => $form,
             'torrent' => $torrentFile,
-            'success_msg' => $success_msg
+            'success_msg' => $success_msg,
+            'leechers' => $swarmInfo?->getLeechers(),
+            'seeders' => $swarmInfo?->getSeeders(),
         ]);
     }
 
@@ -87,8 +94,9 @@ class TorrentController extends AbstractController
     }
 
     #[Route('/meta/info/{id}', name: 'meta_info')]
-    public function getTorrentMetaInfo(TorrentFile $torrentFile): Response
+    public function getTorrentMetaInfo(TorrentFile $torrentFile, EventDispatcherInterface $eventDispatcher): Response
     {
+        $eventDispatcher->dispatch(new LoadTorrentFileEvent($torrentFile));
         $this->dataService->refreshSwarmInfo($torrentFile);
         $swarmInfo = $this->dataService->getSwarmInfo($torrentFile);
 

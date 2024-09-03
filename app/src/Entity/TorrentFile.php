@@ -43,6 +43,9 @@ class TorrentFile
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $updated_at = null;
 
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $size = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -128,6 +131,16 @@ class TorrentFile
     public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updated_at;
+    }
+
+    public function getSize(): ?float
+    {
+        return $this->size;
+    }
+
+    public function setSize(?float $size): void
+    {
+        $this->size = $size;
     }
 
     #[ORM\PrePersist]

@@ -1,55 +1,64 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container" style="width: 60%; position: relative">
-{#        ДЛЯ АВТОРА ФАЙЛА ОТОБРАЖАЕМ ФОРМУ #}
-        {% if app.user is same as torrent.author %}
-            <div>
-                {% if errors %}
-                    {{ include('components/error_block.html.twig', { errors: errors, }) }}
-                {% endif %}
+    <div style="display: flex; justify-content: space-between">
+        <div class="container" style="width: 60%; position: relative">
+    {#        ДЛЯ АВТОРА ФАЙЛА ОТОБРАЖАЕМ ФОРМУ #}
+            {% if app.user is same as torrent.author %}
+                <div>
+                    {% if errors %}
+                        {{ include('components/error_block.html.twig', { errors: errors, }) }}
+                    {% endif %}
 
-                {% if success_msg %}
-                    {{ include('components/success_block.html.twig', { success_msg: success_msg, }) }}
-                {% endif %}
+                    {% if success_msg %}
+                        {{ include('components/success_block.html.twig', { success_msg: success_msg, }) }}
+                    {% endif %}
 
-                <div  style="display: flex; justify-content: start">
-                    {{ form_start(form) }}
-                    <div class="form-item">
-                        {{ form_label(form.title) }}
-                        {{ form_widget(form.title) }}
+                    <div  style="display: flex; justify-content: start">
+                        {{ form_start(form) }}
+                        <div class="form-item">
+                            {{ form_label(form.title) }}
+                            {{ form_widget(form.title) }}
+                        </div>
+
+                        <div class="form-item">
+                            {{ form_label(form.description) }}
+                            {{ form_widget(form.description, {'attr': {'row': '10'}}) }}
+                        </div>
+
+                        <a class="pixel-font" href="{{ path('torrent_download', {id: torrent.id}) }}">{{ torrent.title }}</a>
+
+                        <div class="form-item">
+                            {{ form_label(form.category) }}
+                            {{ form_widget(form.category, {'attr': {'style': 'width: 68%'}} ) }}
+                        </div>
+
+                        <div class="form-item">
+                            {{ form_widget(form.save, {'attr': {'class': 'base-btn', 'style': 'margin: 0 auto'}}) }}
+                        </div>
+
+                        {{ form_end(form) }}
                     </div>
-
-                    <div class="form-item">
-                        {{ form_label(form.description) }}
-                        {{ form_widget(form.description, {'attr': {'row': '10'}}) }}
-                    </div>
-
-                    <a class="pixel-font" href="{{ path('torrent_download', {id: torrent.id}) }}">{{ torrent.title }}</a>
-
-                    <div class="form-item">
-                        {{ form_label(form.category) }}
-                        {{ form_widget(form.category, {'attr': {'style': 'width: 68%'}} ) }}
-                    </div>
-
-                    <div class="form-item">
-                        {{ form_widget(form.save, {'attr': {'class': 'base-btn', 'style': 'margin: 0 auto'}}) }}
-                    </div>
-
-                    {{ form_end(form) }}
                 </div>
-            </div>
-            <div class="trash-icon">
-                <a href="" class="trash-image-link">
-                    <img src="{{ asset('img/trash_icon.png') }}" alt="trash-img" class="image">
-                </a>
-            </div>
-        {% else %}
-            <h2>{{ torrent.title }}</h2>
-            <p>{{ torrent.description }}</p>
-            <h4>Category: {{ torrent.category.name }} </h4>
-            <a class="pixel-font" href="{{ path('torrent_download', {id: torrent.id}) }}">{{ torrent.title }}</a>
-        {% endif %}
+                <div class="trash-icon">
+                    <a href="" class="trash-image-link">
+                        <img src="{{ asset('img/trash_icon.png') }}" alt="trash-img" class="image">
+                    </a>
+                </div>
+            {% else %}
+                <h2>{{ torrent.title }}</h2>
+                <p>{{ torrent.description }}</p>
+                <h4>Category: {{ torrent.category.name }} </h4>
+                <a class="pixel-font" href="{{ path('torrent_download', {id: torrent.id}) }}">{{ torrent.title }}</a>
+            {% endif %}
+        </div>
+
+        <div class="container" style="width: 35%; font-size: 16pt">
+            <p><strong>{{ 'Size'|trans }}:</strong> {{ torrent.size is defined ? torrent.size|round(2, 'floor') ~ ' Gb' : unknown|trans }}</p>
+            <p><strong>Seeders:</strong> {{ seeders is defined ? seeders : unknown|trans }}</p>
+            <p><strong>Leechers:</strong> {{ leechers is defined ? leechers : unknown|trans }}</p>
+        </div>
     </div>
+
 
 {% endblock %}

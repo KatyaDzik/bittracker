@@ -3,9 +3,11 @@
 namespace App\Controller\User;
 
 use App\Entity\TorrentFile;
+use App\Event\LoadTorrentFileEvent;
 use App\Form\Torrent\CreateTorrentFileFormType;
 use App\Service\CRUDTorrentFileService;
 use Exception;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +28,8 @@ class TorrentFileController extends AbstractController
     #[Route(path: '/', name: '_create', methods: ['GET|POST'])]
     public function create(
         Request $request,
-        CRUDTorrentFileService $torrentFileService
+        CRUDTorrentFileService $torrentFileService,
+        EventDispatcherInterface $eventDispatcher,
     ): Response {
         $torrent = new TorrentFile();
         $form = $this->createForm(CreateTorrentFileFormType::class, $torrent);
@@ -35,6 +38,7 @@ class TorrentFileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $torrent = $form->getData();
             $torrentFileService->createTorrentFile($torrent, $form->get('torrentFile')->getData());
+            $eventDispatcher->dispatch(new LoadTorrentFileEvent($torrent));
 
             return $this->redirectToRoute('profile_view');
         }

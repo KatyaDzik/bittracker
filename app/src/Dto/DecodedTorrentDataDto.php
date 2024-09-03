@@ -40,6 +40,7 @@ class DecodedTorrentDataDto
         private readonly ?string $publisher,
         private readonly ?string $publisherUrl,
         private readonly ?string $infoHash,
+        private readonly ?array $files,
     ) {
     }
 
@@ -73,7 +74,7 @@ class DecodedTorrentDataDto
         return $this->encoding;
     }
 
-    public function getLength(): string
+    public function getLength(): ?string
     {
         return $this->length;
     }
@@ -106,5 +107,10 @@ class DecodedTorrentDataDto
     public function getInfoHash(): ?string
     {
         return $this->infoHash;
+    }
+
+    public function getFiles(): ?array
+    {
+        return $this->files;
     }
 }

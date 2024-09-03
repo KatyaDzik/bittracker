@@ -36,6 +36,7 @@ class BecodeTorrent implements BecodeTorrentInterface
             publisher: $decodedData['publisher'] ?? null,
             publisherUrl: $decodedData['publisher-url'] ?? null,
             infoHash: $this->getInfoHash($decodedData),
+            files: $decodedData['info']['files'] ?? null,
         );
     }
 
