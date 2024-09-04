@@ -54,11 +54,31 @@
         </div>
 
         <div class="container" style="width: 35%; font-size: 16pt">
-            <p><strong>{{ 'Size'|trans }}:</strong> {{ torrent.size is defined ? torrent.size|round(2, 'floor') ~ ' Gb' : unknown|trans }}</p>
-            <p><strong>Seeders:</strong> {{ seeders is defined ? seeders : unknown|trans }}</p>
-            <p><strong>Leechers:</strong> {{ leechers is defined ? leechers : unknown|trans }}</p>
+            <p><strong>{{ 'Size'|trans }}:</strong> {{ torrent.size is not null ? torrent.size|round(2, 'floor') ~ ' Gb' : 'unknown'|trans }}</p>
+            <p><strong>Seeders:</strong> {{ seeders is not null ? seeders : 'unknown'|trans }}</p>
+            <p><strong>Leechers:</strong> {{ leechers is not null ? leechers : 'unknown'|trans }}</p>
         </div>
     </div>
-
-
+{% endblock %}
+{% block script %}
+    <script>
+        const modal = new Modal();
+        $(document).ready(function () {
+            $('.trash-icon').on('click', function (e) {
+                e.preventDefault();
+                let torrentTitle = '{{ torrent.title }}';
+                modal.addTitle("<h2>Do you really want to delete \"" + torrentTitle + "\" ?</h2>");
+                modal.confirm(() => {
+                    $.ajax({
+                        url: '{{ path('torrent_file_delete', {id: torrent.id }) }}',
+                        type: 'DELETE',
+                        success: function(result) {
+                            window.location.href = '{{ path('home') }}';
+                        }
+                    });
+                });
+                modal.open();
+            });
+        });
+    </script>
 {% endblock %}
