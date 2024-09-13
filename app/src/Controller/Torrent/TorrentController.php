@@ -96,7 +96,6 @@ class TorrentController extends AbstractController
     #[Route('/meta/info/{id}', name: 'meta_info')]
     public function getTorrentMetaInfo(TorrentFile $torrentFile, EventDispatcherInterface $eventDispatcher): Response
     {
-        $eventDispatcher->dispatch(new LoadTorrentFileEvent($torrentFile));
         $this->dataService->refreshSwarmInfo($torrentFile);
         $swarmInfo = $this->dataService->getSwarmInfo($torrentFile);
 

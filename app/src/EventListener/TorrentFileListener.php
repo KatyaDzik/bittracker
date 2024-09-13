@@ -15,7 +15,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class TorrentFileListener
 {
     public function __construct(
-        protected readonly LoggerInterface $logger,
+        protected readonly LoggerInterface $torrentLogger,
         protected readonly MessageBusInterface $bus,
         protected readonly SwarmDataService $swarmDataService,
         protected readonly EntityManagerInterface $entityManager,
@@ -46,8 +46,7 @@ class TorrentFileListener
     #[AsEventListener(event: LoadTorrentFileEvent::class)]
     public function loadTorrentFile(LoadTorrentFileEvent $event): void
     {
-        //todo logger нормально сделать  private MessageBusInterface $bus,
-//        $this->logger->debug('New file loaded ' . $event->getTorrentFile()->getTitle());
+        $this->torrentLogger->debug('New file loaded ' . $event->getTorrentFile()->getTitle());
         $torrentFile = $event->getTorrentFile();
         $decodedData = $this->swarmDataService->extractFileData($torrentFile);
         $length = $decodedData->getLength();

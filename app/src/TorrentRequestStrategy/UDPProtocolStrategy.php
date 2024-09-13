@@ -11,9 +11,15 @@ use App\Dto\AnnounceOutputDto;
 use App\Dto\DecodedTorrentDataDto;
 use App\Exception\TorrentException;
 use Exception;
+use Psr\Log\LoggerInterface;
 
 class UDPProtocolStrategy implements RequestStrategyInterface
 {
+    public function __construct(
+        protected readonly LoggerInterface $torrentLogger,
+    ) {
+    }
+
     const  CONNECT_ACTION = 0;
     const SCRAPE_ACTION = 2;
 
@@ -35,7 +41,7 @@ class UDPProtocolStrategy implements RequestStrategyInterface
         try {
             return $this->getScrapeData($announce, $infoHash);
         } catch (Exception $exception) {
-            //todo куда-нибудь в логи пусть пишется
+            $this->torrentLogger->error($exception->getMessage());
         }
 
         return null;
@@ -103,7 +109,7 @@ class UDPProtocolStrategy implements RequestStrategyInterface
             throw new TorrentException('Something went wrong while receiving data');
         }
 
-        $torrentData = unpack('Nseeders/Ncompleted/Nleechers', substr($response, 8, 12));;
+        $torrentData = unpack('Nseeders/Ncompleted/Nleechers', substr($response, 8, 12));
 
         return new AnnounceOutputDto(
             $torrentData['leechers'],

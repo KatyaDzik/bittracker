@@ -38,7 +38,6 @@ class TorrentFileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $torrent = $form->getData();
             $torrentFileService->createTorrentFile($torrent, $form->get('torrentFile')->getData());
-            $eventDispatcher->dispatch(new LoadTorrentFileEvent($torrent));
 
             return $this->redirectToRoute('profile_view');
         }
