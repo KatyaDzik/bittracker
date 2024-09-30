@@ -37,6 +37,11 @@ when@test:
 when@prod:
     monolog:
         handlers:
+            torrent_log:
+                type: stream
+                path: "%kernel.logs_dir%/torrent_%kernel.environment%.log"
+                level: debug
+                channels: [ "!event", "!request", "!security", "!php", "!doctrine", "!messenger", "!app" ]
             main:
                 type: fingers_crossed
                 action_level: error

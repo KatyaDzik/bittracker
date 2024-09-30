@@ -34,3 +34,6 @@ npm run  build
 #### run sql 
 INSERT into admin_user (id, email, password, name, created_at)
 VALUES (nextval('admin_user_id_seq'), 'admin@gmail.com', '$2y$13$IztDZamd9U.XcVWqVfXlM.rqqN82c.DZ/GtUfQ1SVNC.fJ8Xv0kRW', 'admin', current_timestamp);
+
+### Loading Fixtures
+#### php bin/console doctrine:fixtures:load --append --group=app_group
