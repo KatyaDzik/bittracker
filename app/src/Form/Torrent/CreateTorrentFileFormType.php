@@ -23,14 +23,15 @@ class CreateTorrentFileFormType extends AbstractType
                 'label' => 'Torrent',
                 'mapped' => false,
                 'required' => false,
-                'constraints' => [
-                    new File([
-                        'mimeTypes' => [
-                            'application/x-bittorrent',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a file with the extension .torrent',
-                    ])
-                ],
+                'multiple' => true,
+//                'constraints' => [
+//                    new File([
+//                        'mimeTypes' => [
+//                            'application/x-bittorrent',
+//                        ],
+//                        'mimeTypesMessage' => 'Please upload a file with the extension .torrent',
+//                    ])
+//                ],
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,

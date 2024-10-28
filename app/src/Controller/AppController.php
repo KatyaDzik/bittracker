@@ -21,6 +21,7 @@ class AppController extends AbstractController
         PaginatorInterface $paginator,
         TorrentFileRepository $fileRepository
     ): Response {
+
         $page = $request->query->getInt('page', 1);
         $limit = 10;
         $filter = $this->createForm(TorrentFileFilterType::class);

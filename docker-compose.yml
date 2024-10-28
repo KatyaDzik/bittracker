@@ -30,8 +30,6 @@ services:
       PHP_IDE_CONFIG: "serverName=Docker"
     volumes:
       - "./app:/var/www/html"
-    extra_hosts:
-      - host.docker.internal:host-gateway
     depends_on:
       - db
       - nginx
