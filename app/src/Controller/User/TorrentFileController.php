@@ -3,7 +3,6 @@
 namespace App\Controller\User;
 
 use App\Entity\TorrentFile;
-use App\Event\LoadTorrentFileEvent;
 use App\Form\Torrent\CreateTorrentFileFormType;
 use App\Service\CRUDTorrentFileService;
 use Exception;
