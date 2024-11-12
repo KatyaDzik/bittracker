@@ -6,6 +6,7 @@
 parameters:
     avatars_directory: '%kernel.project_dir%/public/uploads/avatars'
     torrents_directory: '%kernel.project_dir%/public/uploads/torrents'
+    amqp_durable: !php/const AMQP_DURABLE
 
 services:
     # default configuration for services in *this* file

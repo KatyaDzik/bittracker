@@ -46,6 +46,12 @@ RUN apk add --no-cache pcre-dev $PHPIZE_DEPS && \
     docker-php-ext-enable redis && \
     apk del $PHPIZE_DEPS
 
+# Install AMQP ext
+RUN apk add --no-cache rabbitmq-c rabbitmq-c-dev autoconf build-base \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp \
+    && apk del autoconf build-base
+
 COPY docker/php/xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
 
 USER user
