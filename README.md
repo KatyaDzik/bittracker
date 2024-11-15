@@ -37,3 +37,9 @@ VALUES (nextval('admin_user_id_seq'), 'admin@gmail.com', '$2y$13$IztDZamd9U.XcVW
 
 ### Loading Fixtures
 #### php bin/console doctrine:fixtures:load --append --group=app_group
+
+
+#### дамп базы 
+
+pg_dump -U bittracker bittracker > dump.sql
+
