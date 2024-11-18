@@ -13,7 +13,8 @@ class AppControllerTest extends WebTestCase
         $client->request(Request::METHOD_GET, '/');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('a', 'Sign in');
-        $this->assertSelectorTextContains('a', 'Sign up');
+        $this->assertAnySelectorTextContains('span.pixel-font', 'Torrent');
+        $this->assertAnySelectorTextContains('a.pixel-font', 'Sign in');
+        $this->assertAnySelectorTextContains('a.pixel-font', 'Sign up');
     }
 }
