@@ -1,65 +1,65 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a href="http://wordpress.loc/?utm_source=15NOVEMBER.com&utm_campaign=ProdukteImmobilien&utm_medium=referral" target="_blank">test link with uml parameters</a>
-{#    <div class="container filter">#}
-{#        {{ form_start(filter) }}#}
-{#        {{ form_row(filter.title) }}#}
-{#        {{ form_row(filter.category) }}#}
-{#        {{ form_row(filter.status) }}#}
-{#        {{ form_row(filter.submit) }}#}
-{#        {{ form_end(filter) }}#}
-{#    </div>#}
+{#    <a href="http://wordpress.loc/?utm_source=15NOVEMBER.com&utm_campaign=ProdukteImmobilien&utm_medium=referral" target="_blank">test link with uml parameters</a>#}
+    <div class="container filter">
+        {{ form_start(filter) }}
+        {{ form_row(filter.title) }}
+        {{ form_row(filter.category) }}
+        {{ form_row(filter.status) }}
+        {{ form_row(filter.submit) }}
+        {{ form_end(filter) }}
+    </div>
 
-{#    {% if torrents %}#}
-{#        <div class="container torrent-list">#}
-{#            {% for torrent in torrents %}#}
-{#                <div class="item" data-torrent="{{ torrent.id }}" data-title="{{ torrent.title }}">#}
-{#                    <a>#}
-{#                        <span style="width: 85%">{{ torrent.title }}</span>#}
-{#                        <span style="width: 13%">{{ torrent.status }}</span>#}
-{#                        <span style="width: 12%">{{ torrent.createdAt|date("d/m/Y") }}</span>#}
-{#                    </a>#}
-{#                </div>#}
-{#            {% endfor %}#}
+    {% if torrents %}
+        <div class="container torrent-list">
+            {% for torrent in torrents %}
+                <div class="item" data-torrent="{{ torrent.id }}" data-title="{{ torrent.title }}">
+                    <a>
+                        <span style="width: 85%">{{ torrent.title }}</span>
+                        <span style="width: 13%">{{ torrent.status }}</span>
+                        <span style="width: 12%">{{ torrent.createdAt|date("d/m/Y") }}</span>
+                    </a>
+                </div>
+            {% endfor %}
 
-{#            <div class="navigation" style="text-align: center">#}
-{#                {{ knp_pagination_render(torrents) }}#}
-{#            </div>#}
-{#        </div>#}
-{#    {% endif %}#}
-{#{% endblock %}#}
-{#{% block script %}#}
-{#    <script>#}
-{#        const modal = new Modal();#}
-{#        $(document).ready(function () {#}
-{#            let clickTimer = null;#}
+            <div class="navigation" style="text-align: center">
+                {{ knp_pagination_render(torrents) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block script %}
+    <script>
+        const modal = new Modal();
+        $(document).ready(function () {
+            let clickTimer = null;
 
-{#            $('.item').on('click', function (e) {#}
-{#                e.preventDefault();#}
+            $('.item').on('click', function (e) {
+                e.preventDefault();
 
-{#                let element = $(this);#}
-{#                clickTimer = setTimeout(function () {#}
-{#                    let torrentId = element.data('torrent');#}
-{#                    window.location.href = "/torrent/file/" + torrentId;#}
-{#                }, 1000); // Задержка в 300 мс (можно настроить при необходимости)#}
-{#                // console.log(clickTimer+' start');#}
-{#            });#}
+                let element = $(this);
+                clickTimer = setTimeout(function () {
+                    let torrentId = element.data('torrent');
+                    window.location.href = "/torrent/file/" + torrentId;
+                }, 1000); // Задержка в 300 мс (можно настроить при необходимости)
+                // console.log(clickTimer+' start');
+            });
 
-{#            $('.item').on('dblclick', function (e) {#}
-{#                e.preventDefault();#}
+            $('.item').on('dblclick', function (e) {
+                e.preventDefault();
 
-{#                clearTimeout(clickTimer); // Отменяем обработчик одинарного клика#}
-{#                // clickTimer = null;#}
-{#                // console.log(clickTimer + ' end');#}
-{#                let torrentId = $(this).data('torrent');#}
-{#                let torrentTitle = $(this).data('title');#}
-{#                modal.addTitle("<h2>Do you really want to download \"" + torrentTitle + "\" ?</h2>");#}
-{#                modal.confirm(() => {#}
-{#                    window.location.href = "/torrent/file/download/" + torrentId;#}
-{#                });#}
-{#                modal.open();#}
-{#            });#}
-{#        });#}
-{#    </script>#}
+                clearTimeout(clickTimer); // Отменяем обработчик одинарного клика
+                // clickTimer = null;
+                // console.log(clickTimer + ' end');
+                let torrentId = $(this).data('torrent');
+                let torrentTitle = $(this).data('title');
+                modal.addTitle("<h2>Do you really want to download \"" + torrentTitle + "\" ?</h2>");
+                modal.confirm(() => {
+                    window.location.href = "/torrent/file/download/" + torrentId;
+                });
+                modal.open();
+            });
+        });
+    </script>
 {% endblock %}

@@ -4,7 +4,7 @@
             <li><a href="{{ path('home') }}" class="roboto-font"><span class="pixel-font">Torrent</span>Hub</a></li>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <form action="{{ path('user_logout') }}" method="post">
-                    <input class="pixel-font" type="submit" value=logout>
+                    <input class="pixel-font logout" type="submit" value=logout>
                 </form>
 {#                <li><a class="pixel-font" href="{{ path('torrent_file_create') }}">{{ 'Load Torrent'|trans }}</a></li>#}
                 <li><a class="pixel-font" href="{{ path('profile_view') }}">{{ 'Profile'|trans }}</a></li>
