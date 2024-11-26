@@ -46,6 +46,7 @@ class AuthControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 
+
     public function testLogout(): void
     {
         $client = static::createClient();
