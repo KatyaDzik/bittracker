@@ -2,7 +2,12 @@ version: '3.2'
 
 services:
   nginx:
-    image: nginx:1.17-alpine
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+      args:
+        BASE_USER: '${BASE_USER}'
+        BASE_PASSWORD: '${BASE_PASSWORD}'
     container_name: '${PROJECT_NAME}_nginx'
     restart: unless-stopped
     env_file:
